@@ -15,7 +15,7 @@ import { CalendarService } from './calendar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { INITIAL_EVENTS } from './events-util';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { UnsubscribeOnDestroyAdapter } from '../shared/UnsubscribeOnDestroyAdapter';
+import { UnsubscribeOnDestroyAdapter } from '../../shared/UnsubscribeOnDestroyAdapter';
 
 @Component({
   selector: 'app-calendar',

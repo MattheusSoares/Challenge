@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AdvanceTable } from './advance-table.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { UnsubscribeOnDestroyAdapter } from '../shared/UnsubscribeOnDestroyAdapter';
+import { UnsubscribeOnDestroyAdapter } from '../../shared/UnsubscribeOnDestroyAdapter';
 @Injectable()
 export class AdvanceTableService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URL = 'assets/data/advanceTable.json';

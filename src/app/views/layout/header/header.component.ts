@@ -9,7 +9,7 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfigService } from 'src/app/config/config.service';
+import { ConfigService } from 'src/app/views/config/config.service';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { RightSidebarService } from 'src/app/core/service/rightsidebar.service';
 import { WINDOW } from 'src/app/core/service/window.service';

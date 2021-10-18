@@ -9,7 +9,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { RightSidebarService } from 'src/app/core/service/rightsidebar.service';
-import { ConfigService } from 'src/app/config/config.service';
+import { ConfigService } from 'src/app/views/config/config.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 

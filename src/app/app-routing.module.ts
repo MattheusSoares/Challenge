@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { Page404Component } from './authentication/page404/page404.component';
+import { Page404Component } from './views/authentication/page404/page404.component';
 import { AuthGuard } from './core/guard/auth.guard';
-import { AuthLayoutComponent } from './layout/app-layout/auth-layout/auth-layout.component';
-import { MainLayoutComponent } from './layout/app-layout/main-layout/main-layout.component';
+import { AuthLayoutComponent } from './views/layout/app-layout/auth-layout/auth-layout.component';
+import { MainLayoutComponent } from './views/layout/app-layout/main-layout/main-layout.component';
 
 const routes: Routes = [
   {
@@ -15,95 +15,102 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () =>
-          import('./dashboard/dashboard.module').then((m) => m.DashboardModule)
+          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
       },
       {
         path: 'advance-table',
         loadChildren: () =>
-          import('./advance-table/advance-table.module').then(
+          import('./views/advance-table/advance-table.module').then(
             (m) => m.AdvanceTableModule
+          )
+      },
+      {
+        path: 'employee',
+        loadChildren: () =>
+          import('./views/employees/employee.module').then(
+            (m) => m.EmployeeModule
           )
       },
       {
         path: 'calendar',
         loadChildren: () =>
-          import('./calendar/calendar.module').then((m) => m.CalendarsModule)
+          import('./views/calendar/calendar.module').then((m) => m.CalendarsModule)
       },
       {
         path: 'task',
         loadChildren: () =>
-          import('./task/task.module').then((m) => m.TaskModule)
+          import('./views/task/task.module').then((m) => m.TaskModule)
       },
       {
         path: 'contacts',
         loadChildren: () =>
-          import('./contacts/contacts.module').then((m) => m.ContactsModule)
+          import('./views/contacts/contacts.module').then((m) => m.ContactsModule)
       },
       {
         path: 'email',
         loadChildren: () =>
-          import('./email/email.module').then((m) => m.EmailModule)
+          import('./views/email/email.module').then((m) => m.EmailModule)
       },
       {
         path: 'apps',
         loadChildren: () =>
-          import('./apps/apps.module').then((m) => m.AppsModule)
+          import('./views/apps/apps.module').then((m) => m.AppsModule)
       },
       {
         path: 'widget',
         loadChildren: () =>
-          import('./widget/widget.module').then((m) => m.WidgetModule)
+          import('./views/widget/widget.module').then((m) => m.WidgetModule)
       },
       {
         path: 'ui',
-        loadChildren: () => import('./ui/ui.module').then((m) => m.UiModule)
+        loadChildren: () => import('./views/ui/ui.module').then((m) => m.UiModule)
       },
       {
         path: 'forms',
         loadChildren: () =>
-          import('./forms/forms.module').then((m) => m.FormModule)
+          import('./views/forms/forms.module').then((m) => m.FormModule)
       },
       {
         path: 'tables',
         loadChildren: () =>
-          import('./tables/tables.module').then((m) => m.TablesModule)
+          import('./views/tables/tables.module').then((m) => m.TablesModule)
       },
       {
         path: 'media',
         loadChildren: () =>
-          import('./media/media.module').then((m) => m.MediaModule)
+          import('./views/media/media.module').then((m) => m.MediaModule)
       },
       {
         path: 'charts',
         loadChildren: () =>
-          import('./charts/charts.module').then((m) => m.ChartsModule)
+          import('./views/charts/charts.module').then((m) => m.ChartsModule)
       },
       {
         path: 'timeline',
         loadChildren: () =>
-          import('./timeline/timeline.module').then((m) => m.TimelineModule)
+          import('./views/timeline/timeline.module').then((m) => m.TimelineModule)
       },
       {
         path: 'icons',
         loadChildren: () =>
-          import('./icons/icons.module').then((m) => m.IconsModule)
+          import('./views/icons/icons.module').then((m) => m.IconsModule)
       },
       {
         path: 'extra-pages',
         loadChildren: () =>
-          import('./extra-pages/extra-pages.module').then(
+          import('./views/extra-pages/extra-pages.module').then(
             (m) => m.ExtraPagesModule
           )
       },
       {
         path: 'maps',
         loadChildren: () =>
-          import('./maps/maps.module').then((m) => m.MapsModule)
+          import('./views/maps/maps.module').then((m) => m.MapsModule)
       },
       {
         path: 'multilevel',
         loadChildren: () =>
-          import('./multilevel/multilevel.module').then(
+          import('./views/multilevel/multilevel.module').then(
             (m) => m.MultilevelModule
           )
       }
@@ -113,7 +120,7 @@ const routes: Routes = [
     path: 'authentication',
     component: AuthLayoutComponent,
     loadChildren: () =>
-      import('./authentication/authentication.module').then(
+      import('./views/authentication/authentication.module').then(
         (m) => m.AuthenticationModule
       )
   },

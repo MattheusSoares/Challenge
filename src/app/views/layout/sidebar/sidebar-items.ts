@@ -93,7 +93,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: []
   },
   {
-    path: 'employees',
+    path: 'employee',
     title: 'Colaboradores',
     moduleName: 'employee',
     icon: 'far fa-address-card',

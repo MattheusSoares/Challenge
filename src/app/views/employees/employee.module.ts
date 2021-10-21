@@ -28,6 +28,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MaterialFileInputModule } from "ngx-material-file-input";
 import { AdvanceTableRoutingModule } from "../advance-table/advance-table-routing.module";
 import { ContactsService } from "../contacts/contacts.service";
+import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes.component";
 
 @NgModule({
     imports: [
@@ -59,7 +60,8 @@ import { ContactsService } from "../contacts/contacts.service";
     declarations: [
     EmployeeComponent,
     EmployeeFormComponent,
-    EmployeeDeleteComponent
+    EmployeeDeleteComponent,
+    EmployeeDetalhesComponent
     ],
     providers: [
       SnackbarComponent,

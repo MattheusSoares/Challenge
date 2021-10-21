@@ -194,6 +194,7 @@ export class ContactsComponent
           this.selection.select(row)
         );
   }
+  
   removeSelectedRows() {
     const totalSelect = this.selection.selected.length;
     this.selection.selected.forEach((item) => {

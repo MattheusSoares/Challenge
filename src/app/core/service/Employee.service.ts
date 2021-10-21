@@ -20,4 +20,8 @@ export class EmployeeService {
       console.log('Teste')
     return this.http.get<Employee[]>(`${this.baseUrl}/Employee`);
   }
+
+  getById(id){
+
+  }
 }

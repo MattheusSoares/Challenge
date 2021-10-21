@@ -1,28 +1,28 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { ContactsService } from '../contacts.service';
 import {
   FormControl,
   Validators,
   FormGroup,
   FormBuilder
 } from '@angular/forms';
-import { Contacts } from '../contacts.model';
 import { formatDate } from '@angular/common';
+import { Contacts } from '../../contacts/contacts.model';
+import { ContactsService } from '../../contacts/contacts.service';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss']
+  styleUrls: ['./form.component.sass']
 })
-export class FormComponent {
+export class EmployeeFormComponent {
   action: string;
   dialogTitle: string;
   isDetails = false;
   contactsForm: FormGroup;
   contacts: Contacts;
   constructor(
-    public dialogRef: MatDialogRef<FormComponent>,
+    public dialogRef: MatDialogRef<EmployeeFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public contactsService: ContactsService,
     private fb: FormBuilder
@@ -83,3 +83,4 @@ export class FormComponent {
     this.contactsService.addContacts(this.contactsForm.getRawValue());
   }
 }
+

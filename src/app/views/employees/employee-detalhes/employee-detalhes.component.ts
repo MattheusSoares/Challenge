@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UnsubscribeOnDestroyAdapter } from '../../../shared/UnsubscribeOnDestroyAdapter';
 import { ContactsService } from '../../contacts/contacts.service';
-import { EmployeeService } from 'src/app/core/service/Employee.service';
-import { Router } from '@angular/router';
+import { EmployeeService } from 'src/app/core/service/employee.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-employee-detalhes',
@@ -21,11 +21,13 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         public contactsService: ContactsService,
         public employeeService: EmployeeService,
         private snackBar: MatSnackBar,
-        private route: Router) {
+        private route: ActivatedRoute) {
         super();
     }
 
     ngOnInit() {
+        const employeelId = this.route.snapshot.paramMap.get('id');
+        console.log(employeelId);
     }
 
     refresh() {

@@ -29,6 +29,8 @@ import { MaterialFileInputModule } from "ngx-material-file-input";
 import { AdvanceTableRoutingModule } from "../advance-table/advance-table-routing.module";
 import { ContactsService } from "../contacts/contacts.service";
 import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes.component";
+import { MatTabsModule } from "@angular/material/tabs";
+import { NgxEchartsModule } from "ngx-echarts";
 
 @NgModule({
     imports: [
@@ -38,6 +40,7 @@ import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes
     FormsModule,
     ReactiveFormsModule,
     AdvanceTableRoutingModule,
+    MatTabsModule,
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
@@ -55,7 +58,11 @@ import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes
     MatToolbarModule,
     MaterialFileInputModule,
     MatMenuModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
+
     ],
     declarations: [
     EmployeeComponent,

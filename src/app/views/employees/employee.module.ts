@@ -31,6 +31,7 @@ import { ContactsService } from "../contacts/contacts.service";
 import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { NgxEchartsModule } from "ngx-echarts";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
 @NgModule({
     imports: [
@@ -59,6 +60,7 @@ import { NgxEchartsModule } from "ngx-echarts";
     MaterialFileInputModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    NgxDatatableModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),

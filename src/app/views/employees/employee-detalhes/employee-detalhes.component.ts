@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,6 +7,8 @@ import { ContactsService } from '../../contacts/contacts.service';
 import { EmployeeService } from 'src/app/core/service/employee.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EChartOption } from 'echarts';
+import { FormControl } from '@angular/forms';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
 
 @Component({
     selector: 'app-employee-detalhes',
@@ -15,6 +17,7 @@ import { EChartOption } from 'echarts';
 })
 
 export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
+    @ViewChild(DatatableComponent, { static: false }) table2: DatatableComponent;
     /* Pie Chart */
     pie_chart: EChartOption = {
         tooltip: {
@@ -71,12 +74,76 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         super();
     }
 
+    attributeCategories = new FormControl();
+    attributeCategoryList: string[] = [
+        'Achievements',
+        'Hard Skills',
+        'Soft Skills'
+    ];
+
+    attributeTypes = new FormControl();
+    attributeTypeList: string[] = [
+        'Azure Certifications',
+        'Backend Development',
+        'DevOps Concepts',
+        'Mobile Development',
+        'AWS Certifications',
+        'GCP Certifications',
+        'Frontend Development'
+    ];
+
+    tb2columns = [
+        { name: 'First Name' },
+        { name: 'Last Name' },
+        { name: 'Address' }
+    ];
+    tb2data = [];
+    tb2filteredData = [];
+
     ngOnInit() {
         const employeelId = this.route.snapshot.paramMap.get('id');
-        console.log(employeelId);
+        this.tb2fetch((data) => {
+            this.tb2data = data;
+            this.tb2filteredData = data;
+        });
     }
 
     refresh() {
+    }
+
+    tb2fetch(cb) {
+        const req = new XMLHttpRequest();
+        req.open('GET', 'assets/data/ngx-data.json');
+        req.onload = () => {
+            const data = JSON.parse(req.response);
+            cb(data);
+        };
+        req.send();
+    }
+
+    tb2filterDatatable(event) {
+        // get the value of the key pressed and make it lowercase
+        const val = event.target.value.toLowerCase();
+        // get the amount of columns in the table
+        const colsAmt = this.tb2columns.length;
+        // get the key names of each column in the dataset
+        const keys = Object.keys(this.tb2filteredData[0]);
+        // assign filtered matches to the active datatable
+        this.tb2data = this.tb2filteredData.filter(function (item) {
+            // iterate through each row's column data
+            for (let i = 0; i < colsAmt; i++) {
+                // check for a match
+                if (
+                    item[keys[i]].toString().toLowerCase().indexOf(val) !== -1 ||
+                    !val
+                ) {
+                    // found match, return true to add to result set
+                    return true;
+                }
+            }
+        });
+        // whenever the filter changes, always go back to the first page
+        this.table2.offset = 0;
     }
 
 }

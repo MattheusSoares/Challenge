@@ -18,6 +18,7 @@ import { Employee } from 'src/app/core/models/employee.model';
 import { EmployeeService } from 'src/app/core/service/employee.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-employee',
@@ -42,6 +43,7 @@ export class EmployeeComponent
   dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<Employee>(true, []);
   id: number;
+  disableCheckbox: boolean;
   //contacts: Contacts | null;
   employees: Employee[] = [];
   constructor(
@@ -63,6 +65,7 @@ export class EmployeeComponent
 
   ngOnInit() {
     this.loadData();
+    this.disableCheckbox = false; 
   }
   refresh() {
     this.loadData();
@@ -86,6 +89,7 @@ export class EmployeeComponent
   }
 
   addNew() {
+    console.log("selection: ", this.selection.selected)
     // let tempDirection;
     // if (localStorage.getItem('isRtl') === 'true') {
     //   tempDirection = 'rtl';
@@ -116,7 +120,11 @@ export class EmployeeComponent
     //   }
     // });
   }
+
   detailsCall(row) {
+
+    console.log("selection: ", this.selection);
+    console.log("row: ", row);
     let tempDirection;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -212,12 +220,22 @@ export class EmployeeComponent
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach((row) =>
-          this.selection.select(row)
-        );
+    // this.isAllSelected()
+    //   ? this.selection.clear() && checkSelectionBool = true
+    //   : this.dataSource.data.forEach((row) =>
+    //       this.selection.select(row)
+    //     );
+    if(this.isAllSelected){
+      this.selection.clear();
+      this.checkSelectionBool = true
+    } else{
+      this.dataSource.data.forEach((row) =>
+            this.selection.select(row));
+    }
+
   }
+
+  checkSelectionBool: boolean;
   
   removeSelectedRows() {
     // const totalSelect = this.selection.selected.length;
@@ -258,6 +276,14 @@ export class EmployeeComponent
       horizontalPosition: placementAlign,
       panelClass: colorName
     });
+  }
+
+  checkSelection(){
+    debugger
+    if(this.selection.selected.length >= 2)
+      this.disableCheckbox = true; 
+    else
+      this.disableCheckbox = false; 
   }
 }
 

@@ -29,6 +29,9 @@ import { MaterialFileInputModule } from "ngx-material-file-input";
 import { AdvanceTableRoutingModule } from "../advance-table/advance-table-routing.module";
 import { ContactsService } from "../contacts/contacts.service";
 import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes.component";
+import { EmployeeComparacaoComponent } from './employee-comparacao/employee-comparacao.component';
+import { TablesRoutingModule } from "../tables/tables-routing.module";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
 @NgModule({
     imports: [
@@ -55,13 +58,16 @@ import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes
     MatToolbarModule,
     MaterialFileInputModule,
     MatMenuModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TablesRoutingModule,
+    NgxDatatableModule
     ],
     declarations: [
     EmployeeComponent,
     EmployeeFormComponent,
     EmployeeDeleteComponent,
-    EmployeeDetalhesComponent
+    EmployeeDetalhesComponent,
+    EmployeeComparacaoComponent
     ],
     providers: [
       SnackbarComponent,

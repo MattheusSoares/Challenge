@@ -15,29 +15,55 @@ export class EmployeeComparacaoComponent implements OnInit {
   colaboradorAtributos: any[] =  [
     {
       atributo: 'C#',
-      colaboradorA: 10,
-      colaboradorB: 8
+      mColaboradorA: 10.0,
+      maiorMA: true,
+      m10ColaboradorA: 8.9,
+      maiorM10A: true,
+      mColaboradorB: 8,
+      maiorMB: false,
+      m10ColaboradorB: 8.2,
+      maiorM10B: false
     },
     {
       atributo: 'Java',
-      colaboradorA: 5,
-      colaboradorB: 9
+      mColaboradorA: 9.3,
+      maiorMA: true,
+      m10ColaboradorA: 8.8,
+      maiorM10A: true,
+      mColaboradorB: 8.5,
+      maiorMB: false,
+      m10ColaboradorB: 8.0,
+      maiorM10B: false
     },
     {
       atributo: 'Angular',
-      colaboradorA: 8,
-      colaboradorB: 6
+      mColaboradorA: 7.5,
+      maiorMA: false,
+      m10ColaboradorA: 8.5,
+      maiorM10A: false,
+      mColaboradorB: 9.0,
+      maiorMB: true,
+      m10ColaboradorB: 9.6,
+      maiorM10B: true
     },
     {
       atributo: 'React',
-      colaboradorA: 7,
-      colaboradorB: 9
+      mColaboradorA: 10.0,
+      maiorMA: true,
+      m10ColaboradorA: 9.8,
+      maiorM10A: true,
+      mColaboradorB: 7.0,
+      maiorMB: false,
+      m10ColaboradorB: 7.0,
+      maiorM10B: false
     }
   ]
   displayedColumns: string[] = [
     'atributo',
-    'colaboradorA',
-    'colaboradorB'
+    'mColaboradorA',
+    'm10ColaboradorA',
+    'mColaboradorB',
+    'm10ColaboradorB'
   ];
   dataSource = new MatTableDataSource<any>(this.colaboradorAtributos);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EmployeeAttribute } from '../models/employee-attribute.model';
 import { Employee } from '../models/employee.model';
 
 @Injectable({
@@ -21,6 +22,5 @@ export class EmployeeService {
   }
 
   getById(id){
-
   }
 }

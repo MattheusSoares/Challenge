@@ -9,6 +9,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EChartOption } from 'echarts';
 import { FormControl } from '@angular/forms';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { EmployeeAttributeService } from 'src/app/core/service/employee-attribute.service';
+import { AttributeService } from 'src/app/core/service/attribute.service';
+import { EmployeeAttribute } from 'src/app/core/models/employee-attribute.model';
 
 @Component({
     selector: 'app-employee-detalhes',
@@ -69,10 +72,14 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         public dialog: MatDialog,
         public contactsService: ContactsService,
         public employeeService: EmployeeService,
+        public employeeAttributeService: EmployeeAttributeService,
+        public attributeService: AttributeService,
         private snackBar: MatSnackBar,
         private route: ActivatedRoute) {
         super();
     }
+
+    listaEmployeeAttribute: EmployeeAttribute[];
 
     attributeCategories = new FormControl();
     attributeCategoryList: string[] = [
@@ -105,6 +112,14 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.tb2fetch((data) => {
             this.tb2data = data;
             this.tb2filteredData = data;
+        });
+        this.getEmployeeAttribute(employeelId);
+    }
+
+    getEmployeeAttribute(id: string){
+        this.employeeAttributeService.getByEmployeeId(id).subscribe(response => {
+            this.listaEmployeeAttribute = response;
+            console.log(this.listaEmployeeAttribute);
         });
     }
 

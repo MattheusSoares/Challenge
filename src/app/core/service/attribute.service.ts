@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
+import { Attribute } from '@angular/compiler';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Employee } from '../models/employee.model';
-
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService {
+export class AttributeService {
 
   readonly baseUrl: string;
 
@@ -16,8 +15,8 @@ export class EmployeeService {
     this.baseUrl = baseUrl;
   }
 
-  getAll(): Observable<Employee[]> {
-    return this.http.get<Employee[]>(`${this.baseUrl}/Employee`);
+  getAll(): Observable<Attribute[]> {
+    return this.http.get<Attribute[]>(`${this.baseUrl}/Attribute`);
   }
 
 }

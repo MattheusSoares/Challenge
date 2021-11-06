@@ -12,6 +12,8 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { EmployeeAttributeService } from 'src/app/core/service/employee-attribute.service';
 import { AttributeService } from 'src/app/core/service/attribute.service';
 import { EmployeeAttribute } from 'src/app/core/models/employee-attribute.model';
+import { AttributeTypeService } from 'src/app/core/service/attibute.type.service';
+import { AttributeCategoryService } from 'src/app/core/service/attribute.category.service';
 
 @Component({
     selector: 'app-employee-detalhes',
@@ -74,6 +76,8 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         public employeeService: EmployeeService,
         public employeeAttributeService: EmployeeAttributeService,
         public attributeService: AttributeService,
+        public attributeTypeService: AttributeTypeService,
+        public attributeCategoryService: AttributeCategoryService,
         private snackBar: MatSnackBar,
         private route: ActivatedRoute) {
         super();
@@ -82,22 +86,10 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     listaEmployeeAttribute: EmployeeAttribute[];
 
     attributeCategories = new FormControl();
-    attributeCategoryList: string[] = [
-        'Achievements',
-        'Hard Skills',
-        'Soft Skills'
-    ];
+    attributeCategoryList: string[] = [];
 
     attributeTypes = new FormControl();
-    attributeTypeList: string[] = [
-        'Azure Certifications',
-        'Backend Development',
-        'DevOps Concepts',
-        'Mobile Development',
-        'AWS Certifications',
-        'GCP Certifications',
-        'Frontend Development'
-    ];
+    attributeTypeList: string[] = [];
 
     tb2columns = [
         { name: 'First Name' },
@@ -114,6 +106,8 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
             this.tb2filteredData = data;
         });
         this.getEmployeeAttribute(employeelId);
+        this.getattributeTypeList();
+        this.getattributeCategoryList();
     }
 
     getEmployeeAttribute(id: string){
@@ -121,6 +115,30 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
             this.listaEmployeeAttribute = response;
             console.log(this.listaEmployeeAttribute);
         });
+    }
+
+    getattributeTypeList(){
+        this.attributeTypeService.getAll().subscribe(
+            response =>{
+                this.attributeTypeList = response.map(attributeType => attributeType.description)
+                console.log(response)
+            },
+            error => {
+                console.log(error)
+            }
+        )
+    }
+
+    getattributeCategoryList(){
+        this.attributeCategoryService.getAll().subscribe(
+            response =>{
+                this.attributeCategoryList = response.map(attributeCategory => attributeCategory.description)
+                console.log(response)
+            },
+            error => {
+                console.log(error)
+            }
+        )
     }
 
     refresh() {

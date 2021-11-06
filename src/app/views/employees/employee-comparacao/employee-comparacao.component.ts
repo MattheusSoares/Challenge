@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProcessEmployeeAttribute } from 'src/app/core/models/process-employee-attribubtes.model';
-import { Attribute } from '@angular/compiler';
 import { Employee } from 'src/app/core/models/employee.model';
 import { EmployeeService } from 'src/app/core/service/employee.service';
 import { EmployeeAttributeService } from 'src/app/core/service/employee-attribute.service';
 import { AttributeService } from 'src/app/core/service/attribute.service';
+import { Attribute } from 'src/app/core/models/attribute.model';
 
 @Component({
   selector: 'app-employee-comparacao',
@@ -14,6 +14,11 @@ import { AttributeService } from 'src/app/core/service/attribute.service';
   styleUrls: ['./employee-comparacao.component.scss']
 })
 export class EmployeeComparacaoComponent implements OnInit {
+
+  ehMaiorA: boolean; 
+  ehMaior10A: boolean; 
+  ehMaiorB: boolean; 
+  ehMaior10B: boolean; 
 
   idColaborador1 = '775c83ee-aa7e-4047-b737-191a1065cda5';
   idColaborador2 = '6abf8b22-4149-4cf4-a41e-52012869f433';
@@ -23,10 +28,10 @@ export class EmployeeComparacaoComponent implements OnInit {
   employee1: Employee = new Employee();
   employee2: Employee = new Employee();
 
-  requestBodyEmployeeProcess1 = {employeeId: "", attributeIds: []};
-  requestBodyEmployeeProcess2 = {employeeId: "", attributeIds: []};
+  requestBodyEmployeeProcess1 = { employeeId: "", attributeIds: [] };
+  requestBodyEmployeeProcess2 = { employeeId: "", attributeIds: [] };
 
-  atributosFiltro: any[] = [
+  atributosFiltro = [
     "06e6dbc6-3605-431e-94a9-8452457765b2",
     "8a97f6e5-653a-42e5-af81-95e9f441a29b",
     "d2b5998d-f452-4d50-a585-e34168604582",
@@ -35,8 +40,8 @@ export class EmployeeComparacaoComponent implements OnInit {
   attributesList: Attribute[] = [];
 
 
-  processDataEmployee1: ProcessEmployeeAttribute;
-  processDataEmployee2: ProcessEmployeeAttribute;
+  processDataEmployeeA: ProcessEmployeeAttribute;
+  processDataEmployeeB: ProcessEmployeeAttribute;
 
 
   colaboradorAtributos: any[] = [
@@ -109,73 +114,98 @@ export class EmployeeComparacaoComponent implements OnInit {
 
   loadData() {
 
-      this.employeeService.getAll().subscribe({
-        next: employees => {
-          this.employeeList = employees;
-          debugger
-          this.employee1 = this.employeeList.find(emp => emp.id === this.idColaborador1);
-          this.requestBodyEmployeeProcess1.employeeId = this.idColaborador1;
-          this.requestBodyEmployeeProcess1.attributeIds = this.atributosFiltro;
-          console.log(this.requestBodyEmployeeProcess1);
-          this.employee2 = this.employeeList.find(emp => emp.id === this.idColaborador2);
-          this.requestBodyEmployeeProcess2.employeeId = this.idColaborador2;
-          this.requestBodyEmployeeProcess2.attributeIds = this.atributosFiltro;
-          console.log(this.requestBodyEmployeeProcess2);
-          this.employeeAttributeService.getByEmployeeProcessAttributes(this.requestBodyEmployeeProcess1).subscribe({
-            next: process => {
-              this.processDataEmployee1 = process;
-              console.log("processData1: ", this.processDataEmployee1);
-            },
-            error: err => console.log(err)
-          });
-    
-        },
-        error: err => console.log(err)
-      });
-    
-      this.attributeService.getAll().subscribe({
-        next: att => {
-          this.attributesList = att;
-          console.log("atributos: ", this.attributesList);
-        },
-        error: err => console.log(err)
-      });
-    
-      
+    this.attributeService.getAll().subscribe({
+      next: att => {
+        this.attributesList = att;
+        console.log("atributos: ", this.attributesList);
+        this.employeeService.getById(this.idColaborador1).subscribe({
+          next: employee => {
+            this.employee1 = employee;
+            this.requestBodyEmployeeProcess1.employeeId = this.idColaborador1;
+            this.requestBodyEmployeeProcess1.attributeIds = this.atributosFiltro;
+            this.employeeAttributeService.getByEmployeeProcessAttributes(this.requestBodyEmployeeProcess1).subscribe({
+              next: process => {
+                this.processDataEmployeeA = process;
+                console.log("processData1: ", this.processDataEmployeeA);
+                this.employeeService.getById(this.idColaborador2).subscribe({
+                  next: employee => {
+                    this.employee2 = employee;
+                    this.requestBodyEmployeeProcess2.employeeId = this.idColaborador2;
+                    this.requestBodyEmployeeProcess2.attributeIds = this.atributosFiltro;
+                    this.employeeAttributeService.getByEmployeeProcessAttributes(this.requestBodyEmployeeProcess2).subscribe({
+                      next: process => {
+                        this.processDataEmployeeB = process;
+                        console.log("processData2: ", this.processDataEmployeeB);
+                        this.buildDataSource();
+                      },
+                      error: err => console.log(err)
+                    });
+                  },
+                  error: err => console.log(err)
+                });
+              },
+              error: err => console.log(err)
+            });
+          },
+          error: err => console.log(err)
+        });
+      },
+      error: err => console.log(err)
+    });
 
-     
-    // PROCESS DATA COLAB 1 
-    //lista id atributos predefinida (filtro)
-    // get proecss-employee-attributes colab 1 atributo1 --> obj de process Data
-    //push pra lista de process data colab 1 
-    // get proecss-employee-attributes colab 2 atributo2 --> obj de process Data
-    //push pra lista de process data colab 1 
-    // get proecss-employee-attributes colab 1 atributo3 --> obj de process Data
-    //push pra lista de process data colab 1 
-
-    // PROCESS DATA COLAB 2
-    //lista id atributos predefinida (filtro)
-    // get proecss-employee-attributes colab 2 atributo1 --> obj de process Data
-    //push pra lista de process data colab 1 
-    // get proecss-employee-attributes colab 2 atributo2 --> obj de process Data
-    //push pra lista de process data colab 1 
-    // get proecss-employee-attributes colab 2 atributo3 --> obj de process Data
-    //push pra lista de process data colab 1 
   }
 
-//   this.costcenterService.getAll().pipe(finalize(() => this.isTblLoading = false)).subscribe(centrosCusto => {
-//     this.centrosCusto = centrosCusto;
-//     centrosCusto.forEach(centroCusto => {
-//       const cc = {
-//         id: centroCusto.id,
-//         descricao: centroCusto.descricao,
-//         sigla: centroCusto.sigla,
-//         gestor: centroCusto.gestor.descricao,
-//         empresaId: this.getNomeEmpresa(centroCusto.empresaId),
-//         ativar: centroCusto.ativo,
-//         bloquear: centroCusto.bloqueado
-//       }
-//       this.ccEdited.push(cc)
-//     });
+  buildDataSource() {
+
+    const colaboradorAtributos = this.atributosFiltro.map(id => ({
+      atributo: this.attributesList.find(el => el.id === id).description,
+      //COLABORADOR A
+      mColaboradorA: Math.round(this.processDataEmployeeA.processedEmployeeAttributes.find(el => el.attributeId == id).averageScore * 10)/10,
+      maiorMA: this.ehMaiorMediaGeralA(id),
+      m10ColaboradorA: Math.round(this.processDataEmployeeA.processedEmployeeAttributes.find(el => el.attributeId == id).averageScoreLast10 * 10)/10,
+      maiorM10A: this.ehMaiorMediaGeral10A(id),
+      //COLABORADOR B
+      mColaboradorB: Math.round(this.processDataEmployeeB.processedEmployeeAttributes.find(el => el.attributeId == id).averageScore * 10)/10,
+      maiorMB: this.ehMaiorMediaGeralB(id),
+      m10ColaboradorB: Math.round(this.processDataEmployeeB.processedEmployeeAttributes.find(el => el.attributeId == id).averageScoreLast10 * 10)/10,
+      maiorM10B: this.ehMaiorMediaGeral10B(id),
+
+    }));
+
+    console.log("colaboradorAtributos: ", colaboradorAtributos)
+    this.dataSource.data = colaboradorAtributos;
+  }
+
+  ehMaiorMediaGeralA(id) : boolean{
+    if((this.processDataEmployeeA.processedEmployeeAttributes.find(el => el.attributeId == id).averageScore) > (this.processDataEmployeeB.processedEmployeeAttributes.find(el => el.attributeId == id).averageScore)){
+      return true;
+    } else{
+      return false
+    }
+  }
+
+  ehMaiorMediaGeralB(id) : boolean{
+    if((this.processDataEmployeeB.processedEmployeeAttributes.find(el => el.attributeId == id).averageScore) > (this.processDataEmployeeA.processedEmployeeAttributes.find(el => el.attributeId == id).averageScore)){
+      return true;
+    } else{
+      return false
+    }
+  }
+
+  ehMaiorMediaGeral10A(id) : boolean{
+    if((this.processDataEmployeeA.processedEmployeeAttributes.find(el => el.attributeId == id).averageScoreLast10) > (this.processDataEmployeeB.processedEmployeeAttributes.find(el => el.attributeId == id).averageScoreLast10)){
+      return true;
+    } else{
+      return false
+    }
+  }
+
+  ehMaiorMediaGeral10B(id) : boolean{
+    if((this.processDataEmployeeB.processedEmployeeAttributes.find(el => el.attributeId == id).averageScoreLast10) > (this.processDataEmployeeA.processedEmployeeAttributes.find(el => el.attributeId == id).averageScoreLast10)){
+      return true;
+    } else{
+      return false
+    }
+  }
 }
 

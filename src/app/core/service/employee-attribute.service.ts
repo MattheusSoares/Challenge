@@ -23,9 +23,8 @@ export class EmployeeAttributeService {
 
   getByEmployeeProcessAttributes(body: any): Observable<ProcessEmployeeAttribute> {
     console.log(body)
-    console.log("id: ", body.employeeId)
-    console.log("id: ", body.attributeIds)
-    return this.http.post<ProcessEmployeeAttribute>(`${this.baseUrl}/EmployeeAttribute/process-employee-attributes`, {body: body})
+    console.log("body: ", body)
+    return this.http.post<ProcessEmployeeAttribute>(`${this.baseUrl}/EmployeeAttribute/process-employee-attributes`, body)
   }
 
 }

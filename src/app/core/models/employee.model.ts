@@ -3,4 +3,5 @@ export class Employee {
   firstName: string;
   email: string;
   employeeRoleId: string;
+  photoUrl: string;
 }

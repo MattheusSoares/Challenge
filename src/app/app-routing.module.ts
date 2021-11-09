@@ -113,6 +113,13 @@ const routes: Routes = [
           import('./views/multilevel/multilevel.module').then(
             (m) => m.MultilevelModule
           )
+      },
+      {
+        path: 'role',
+        loadChildren: () =>
+          import('./views/role/role.module').then(
+            (m) => m.RoleModule
+          )
       }
     ]
   },

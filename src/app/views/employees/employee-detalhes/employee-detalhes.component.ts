@@ -14,6 +14,8 @@ import { AttributeService } from 'src/app/core/service/attribute.service';
 import { EmployeeAttribute } from 'src/app/core/models/employee-attribute.model';
 import { AttributeTypeService } from 'src/app/core/service/attibute.type.service';
 import { AttributeCategoryService } from 'src/app/core/service/attribute.category.service';
+import { TestComponentRenderer } from '@angular/core/testing';
+import { Attribute } from 'src/app/core/models/attribute.model';
 
 @Component({
     selector: 'app-employee-detalhes',
@@ -84,6 +86,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     }
 
     listaEmployeeAttribute: EmployeeAttribute[];
+    attributes: Attribute[];
 
     attributeCategories = new FormControl();
     attributeCategoryList: string[] = [];
@@ -92,9 +95,9 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     attributeTypeList: string[] = [];
 
     tb2columns = [
-        { name: 'First Name' },
-        { name: 'Last Name' },
-        { name: 'Address' }
+        { prop : 'attributeName', name: 'Atributo' },
+        { prop : 'score', name: 'Avaliação' },
+        { prop : 'createdAt', name: 'Data da avaliação' }
     ];
     tb2data = [];
     tb2filteredData = [];
@@ -114,6 +117,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.employeeAttributeService.getByEmployeeId(id).subscribe(response => {
             this.listaEmployeeAttribute = response;
             console.log(this.listaEmployeeAttribute);
+            this.getAllAttributes();
         });
     }
 
@@ -141,7 +145,41 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         )
     }
 
+    getAllAttributes(){
+        this.attributeService.getAll().subscribe(
+            response =>{
+                this.attributes = response
+                console.log(response)
+                this.populateTb2();
+
+            },
+            error => {
+                console.log(error)
+            }
+        )
+    }
+
     refresh() {
+    }
+
+    populateTb2(){
+        let list = [];
+        this.listaEmployeeAttribute.forEach(element => {
+            this.attributes.forEach(e =>{
+                if(e.id === element.attributeId){
+                    list.push({
+                        attributeId: element.attributeId,
+                        attributeName: e.description,
+                        createdAt: element.createdAt,
+                        employeeId: element.employeeId,
+                        id: element.id,
+                        score: element.score
+                    })
+                }
+            })
+        })
+
+        this.tb2data = list;
     }
 
     tb2fetch(cb) {
@@ -162,19 +200,20 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         // get the key names of each column in the dataset
         const keys = Object.keys(this.tb2filteredData[0]);
         // assign filtered matches to the active datatable
-        this.tb2data = this.tb2filteredData.filter(function (item) {
-            // iterate through each row's column data
-            for (let i = 0; i < colsAmt; i++) {
-                // check for a match
-                if (
-                    item[keys[i]].toString().toLowerCase().indexOf(val) !== -1 ||
-                    !val
-                ) {
-                    // found match, return true to add to result set
-                    return true;
-                }
-            }
-        });
+        // this.tb2data = this.tb2filteredData.filter(function (item) {
+        //     // iterate through each row's column data
+        //     for (let i = 0; i < colsAmt; i++) {
+        //         // check for a match
+        //         if (
+        //             item[keys[i]].toString().toLowerCase().indexOf(val) !== -1 ||
+        //             !val
+        //         ) {
+        //             // found match, return true to add to result set
+        //             return true;
+        //         }
+        //     }
+        // });
+
         // whenever the filter changes, always go back to the first page
         this.table2.offset = 0;
     }

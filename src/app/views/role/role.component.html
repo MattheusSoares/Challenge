@@ -1,1 +1,141 @@
-<p>role works!</p>
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Roles</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i> Home</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">Roles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12"
+             style="margin-left: 25%;">
+            <div class="card">
+                <div class="header">
+                    <h2>Roles</h2>
+                </div>
+                <div class="body">
+                    <form class="register-form m-4">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                <mat-form-field class="example-full-width"
+                                                appearance="fill">
+                                    <mat-label>Roles</mat-label>
+                                    <mat-select>
+                                        <mat-option value=3>
+                                            Tech Lead
+                                        </mat-option>
+                                        <mat-option value=0>
+                                            Backend
+                                        </mat-option>
+                                        <mat-option value=1>
+                                            Fronted
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-icon matSuffix>trending_up</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                <mat-form-field class="example-full-width"
+                                                appearance="fill">
+                                    <mat-label>Atributos</mat-label>
+                                    <mat-select multiple>
+                                        <mat-option value=3>
+                                            Tech Lead
+                                        </mat-option>
+                                        <mat-option value=0>
+                                            Backend
+                                        </mat-option>
+                                        <mat-option value=1>
+                                            Fronted
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-icon matSuffix>trending_up</mat-icon>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h2>
+                                            <strong>Polar</strong> Chart
+                                        </h2>
+                                    </div>
+                                    <div class="body">
+                                        <div class="recent-report__chart">
+                                            <canvas baseChart
+                                                    class="chart"
+                                                    [data]="polarAreaChartData"
+                                                    [options]="polarChartOptions"
+                                                    [labels]="polarAreaChartLabels"
+                                                    [legend]="polarAreaLegend"
+                                                    [chartType]="polarAreaChartType"
+                                                    [colors]="ploarChartColors"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <mat-table #table
+                                       [dataSource]="dataSource"
+                                       matSort
+                                       class="mat-cell">
+
+                                <ng-container matColumnDef="pathPhoto">
+                                    <mat-header-cell *matHeaderCellDef
+                                                     mat-sort-header>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> <img styles="padding: 5px"
+                                             alt="image"
+                                             class="msr-3 rounded-circle"
+                                             width="40"
+                                             src="{{row.photoUrl}}"></mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="firstName">
+                                    <mat-header-cell *matHeaderCellDef
+                                                     mat-sort-header>Nome
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.firstName}}
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="email">
+                                    <mat-header-cell *matHeaderCellDef
+                                                     mat-sort-header
+                                                     style="min-width: 40%;">Email
+                                                     
+                                    </mat-header-cell>
+                                    <mat-cell  style="min-width: 40%;" *matCellDef="let row"> {{row.email}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns">
+                                </mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;"
+                                         [style.cursor]="'pointer'"
+                                         matRipple>
+                                </mat-row>
+                            </mat-table>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

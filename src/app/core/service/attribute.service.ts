@@ -19,4 +19,8 @@ export class AttributeService {
     return this.http.get<Attribute[]>(`${this.baseUrl}/Attribute`);
   }
 
+  getAllArray(typeArray): Observable<Attribute[]> {
+    return this.http.get<Attribute[]>(`${this.baseUrl}/Attribute/attribute-types`, {params: typeArray});
+  }
+
 }

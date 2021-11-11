@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { OwlDateTimeIntl } from "ng-pick-datetime";
 import { ComponentModule } from "src/app/shared/components/component.module";
 import { SnackbarComponent } from "../ui/snackbar/snackbar.component";
-import { EmployeeRoutingModule } from "./employee-routing.module";
 import { EmployeeComponent } from "./employee.component";
 import { EmployeeFormComponent } from './form/form.component';
 import { EmployeeDeleteComponent } from './delete/delete.component';
@@ -31,7 +30,10 @@ import { ContactsService } from "../contacts/contacts.service";
 import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { NgxEchartsModule } from "ngx-echarts";
+import { EmployeeComparacaoComponent } from './employee-comparacao/employee-comparacao.component';
+import { TablesRoutingModule } from "../tables/tables-routing.module";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+import { EmployeeRoutingModule } from "./employee-routing.module";
 
 @NgModule({
   imports: [
@@ -60,22 +62,23 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
     MaterialFileInputModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    TablesRoutingModule,
     NgxDatatableModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
-    }),
-
-  ],
-  declarations: [
-    EmployeeComponent,
-    EmployeeFormComponent,
-    EmployeeDeleteComponent,
-    EmployeeDetalhesComponent
-  ],
-  providers: [
-    SnackbarComponent,
-    { provide: OwlDateTimeIntl },
-    ContactsService
-  ],
-})
-export class EmployeeModule { }
+    })
+    ],
+    declarations: [
+      EmployeeComponent,
+      EmployeeFormComponent,
+      EmployeeDeleteComponent,
+      EmployeeDetalhesComponent,
+      EmployeeComparacaoComponent
+    ],
+    providers: [
+      SnackbarComponent,
+      { provide: OwlDateTimeIntl}, 
+      ContactsService
+    ],
+  })
+  export class EmployeeModule {}

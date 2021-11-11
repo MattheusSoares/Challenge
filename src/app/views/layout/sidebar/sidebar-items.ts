@@ -100,6 +100,15 @@ export const ROUTES: RouteInfo[] = [
     class: '',
     groupTitle: false,
     submenu: []
+  },
+  {
+    path: 'role',
+    title: 'Roles',
+    moduleName: 'role',
+    icon: 'far fa-address-card',
+    class: '',
+    groupTitle: false,
+    submenu: []
   }
   // {
   //   path: '',

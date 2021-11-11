@@ -28,19 +28,22 @@ import { MaterialFileInputModule } from "ngx-material-file-input";
 import { AdvanceTableRoutingModule } from "../advance-table/advance-table-routing.module";
 import { ContactsService } from "../contacts/contacts.service";
 import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes.component";
+import { MatTabsModule } from "@angular/material/tabs";
+import { NgxEchartsModule } from "ngx-echarts";
 import { EmployeeComparacaoComponent } from './employee-comparacao/employee-comparacao.component';
 import { TablesRoutingModule } from "../tables/tables-routing.module";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { EmployeeRoutingModule } from "./employee-routing.module";
 
 @NgModule({
-    imports: [
+  imports: [
     EmployeeRoutingModule,
     ComponentModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     AdvanceTableRoutingModule,
+    MatTabsModule,
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
@@ -60,14 +63,17 @@ import { EmployeeRoutingModule } from "./employee-routing.module";
     MatMenuModule,
     MatProgressSpinnerModule,
     TablesRoutingModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
     ],
     declarations: [
-    EmployeeComponent,
-    EmployeeFormComponent,
-    EmployeeDeleteComponent,
-    EmployeeDetalhesComponent,
-    EmployeeComparacaoComponent
+      EmployeeComponent,
+      EmployeeFormComponent,
+      EmployeeDeleteComponent,
+      EmployeeDetalhesComponent,
+      EmployeeComparacaoComponent
     ],
     providers: [
       SnackbarComponent,

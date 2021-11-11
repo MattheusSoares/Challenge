@@ -39,6 +39,7 @@
     "@types/d3-shape": "^2.0.0",
     "acorn": "^8.2.4",
     "angular-gauge": "^4.0.0",
+    "angular-notifier": "^9.1.0",
     "apexcharts": "^3.26.3",
     "bootstrap": "^5.0.1",
     "browser-sync": "^2.26.14",

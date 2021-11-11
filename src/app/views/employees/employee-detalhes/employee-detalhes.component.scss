@@ -1,0 +1,52 @@
+.imagem-employee {
+    float: left;
+    margin-left: 10px;
+    max-width: 200px !important;
+    margin-top: -100px !important;
+}
+
+.header-employee {
+    border-radius: 10px 10px 0px 0px !important;
+}
+
+.conteudo-detalhes-employee{
+    padding: 10px;
+}
+
+.dados-apresentacao{
+    margin-bottom: 1rem;
+    text-align: left;
+    margin-left: 227px;
+    margin-top: 7px;
+}
+
+.dados-apresentacao-nome{
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    font-size: larger;
+}
+
+.dados-apresentacao-titulo{
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
+
+.mat-success {
+    background-color: green;
+    color: #fff;
+}
+
+.add {
+    position: absolute;
+    right: 10px;
+}
+
+.mat-form-field {
+    width: inherit;
+}
+
+.mat-dialog-actions {
+    justify-content: flex-end;
+}

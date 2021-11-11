@@ -30,6 +30,7 @@ import {
   HttpClient
 } from '@angular/common/http';
 import { WINDOW_PROVIDERS } from './core/service/window.service';
+import { NotifierModule } from 'angular-notifier';
 import { EmployeeComparacaoComponent } from './views/employees/employee-comparacao/employee-comparacao.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -52,6 +53,46 @@ export function createTranslateLoader(http: HttpClient): any {
     MainLayoutComponent
   ],
   imports: [
+    NotifierModule.withConfig({
+      position: {
+        horizontal: {
+          position: 'right',
+          distance: 12
+        },
+        vertical: {
+          position: 'top',
+          distance: 12,
+          gap: 10
+        }
+      },
+      theme: 'material',
+      behaviour: {
+        autoHide: 5000,
+        onClick: 'hide',
+        onMouseover: 'pauseAutoHide',
+        showDismissButton: true,
+        stacking: 4
+      },
+      animations: {
+        enabled: true,
+        show: {
+          preset: 'slide',
+          speed: 300,
+          easing: 'ease'
+        },
+        hide: {
+          preset: 'fade',
+          speed: 300,
+          easing: 'ease',
+          offset: 50
+        },
+        shift: {
+          speed: 300,
+          easing: 'linear'
+        },
+        overlap: 150
+      }
+    }),
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -84,4 +125,4 @@ export function createTranslateLoader(http: HttpClient): any {
   entryComponents: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

@@ -19,4 +19,7 @@ export class AttributeTypeService {
         return this.http.get<any>(`${this.baseUrl}/AttributeType`);
     }
 
+    getByAttributeCategoryId(id: string): Observable<any[]> {
+        return this.http.get<any[]>(`${this.baseUrl}/AttributeType/attribute-category/${id}`);
+    }
 }

@@ -32,3 +32,21 @@
     margin-left: 0 !important;
     margin-top: 0 !important;
 }
+
+.mat-success {
+    background-color: green;
+    color: #fff;
+}
+
+.add {
+    position: absolute;
+    right: 10px;
+}
+
+.mat-form-field {
+    width: inherit;
+}
+
+.mat-dialog-actions {
+    justify-content: flex-end;
+}

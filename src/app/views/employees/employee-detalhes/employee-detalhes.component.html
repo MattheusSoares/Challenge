@@ -35,25 +35,20 @@
                           <div class="contact-grid">
                             <div class="profile-header bg-dark header-employee">
                             </div>
-                            <img src="assets/images/user/usrbig1.jpg"
+                            <img src="{{ employeeDisplay.photoUrl }}"
                                  class="user-img imagem-employee"
                                  alt="">
                             <div class="dados-apresentacao">
                               <p class="dados-apresentacao-nome">
-                                Mattheus Soares Santos, 25 anos
+                                {{ employeeDisplay.firstName }}
                               </p>
                               <p class="dados-apresentacao-titulo">
-                                Analista Júnior
+                                {{ employeeDisplay.role }}
                               </p>
                               <p class="dados-apresentacao-titulo">
-                                Juiz de Fora, MG
+                                {{ employeeDisplay.email }}
                               </p>
                             </div>
-                            <!-- <div>
-                              <span class="phone">
-                                <i class="material-icons">phone</i>264-625-2583</span>
-                            </div> -->
-
                           </div>
                         </div>
                       </div>
@@ -69,29 +64,29 @@
                                     <div class="card conteudo-detalhes-employee">
 
                                       <mat-form-field>
-                                        <mat-label>Categorias</mat-label>
+                                        <mat-label>Attributes</mat-label>
                                         <mat-select [formControl]="attributeCategories"
+                                                    (selectionChange)="filterSelect($event)"
                                                     multiple>
-                                          <mat-option *ngFor="let attributeCategory of attributeCategoryList"
-                                                      [value]="attributeCategory">{{attributeCategory}}
+                                          <mat-option *ngFor="let attribute of listaEmployeeAttributeDiff"
+                                                      [value]="attribute">{{ attribute }}
                                           </mat-option>
                                         </mat-select>
                                       </mat-form-field>
 
                                     </div>
                                   </div>
-                                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                    <div class="card conteudo-detalhes-employee">
+                                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                    <div class="card add conteudo-detalhes-employee">
 
-                                      <mat-form-field>
-                                        <mat-label>Tipos</mat-label>
-                                        <mat-select [formControl]="attributeTypes"
-                                                    multiple>
-                                          <mat-option *ngFor="let attributeType of attributeTypeList"
-                                                      [value]="attributeType">{{attributeType}}
-                                          </mat-option>
-                                        </mat-select>
-                                      </mat-form-field>
+                                      <button mat-mini-fab
+                                              color="success"
+                                              class="add"
+                                              (click)="saveNewScore(modalNewScore)">
+                                        <mat-icon class="col-white">add
+                                        </mat-icon>
+
+                                      </button>
 
                                     </div>
                                   </div>
@@ -100,7 +95,7 @@
                                 <div class="row">
                                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="card conteudo-detalhes-employee">
-                                      
+
                                       <ngx-datatable #table2
                                                      class="material"
                                                      [rows]="tb2data"
@@ -128,13 +123,13 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                       <h5>Gráfico 1</h5>
                                       <div echarts
-                                           [options]="pie_chart"
+                                           [options]="pieChart"
                                            class="echart-height"></div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                       <h5>Gráfico 2</h5>
                                       <div echarts
-                                           [options]="pie_chart"
+                                           [options]="pieChart"
                                            class="echart-height"></div>
                                     </div>
                                   </div>
@@ -160,3 +155,118 @@
     </div>
   </div>
 </section>
+
+<ng-template #modalNewScore>
+  <div mat-dialog-title>
+    <h5>New Score</h5>
+  </div>
+
+  <div mat-dialog-content>
+    <form class=""
+          [formGroup]="newScoreForm"
+          id="newScoreForm"
+          (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <mat-form-field appearance="fill"
+                          class="width-filter">
+            <mat-label>Categories</mat-label>
+            <mat-select formControlName="controlNewScoreCategories"
+                        (selectionChange)="filterSelectedCategoryNewScore($event)"
+                        required>
+              <mat-option *ngFor="let attributeCategory of newScoreAttributeCategories"
+                          [value]="attributeCategory">
+                {{ attributeCategory.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <mat-form-field appearance="fill"
+                          class="width-filter">
+            <mat-label>Types</mat-label>
+            <mat-select formControlName="controlNewScoreTypes"
+                        (selectionChange)="filterSelectedTypeNewScore($event)"
+                        required>
+              <mat-option *ngFor="let attributeType of newScoreAttributeTypes"
+                          [value]="attributeType">
+                {{ attributeType.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <mat-form-field appearance="fill"
+                          class="width-filter">
+            <mat-label>Attributes</mat-label>
+            <mat-select formControlName="controlNewScoreAttributes"
+                        (selectionChange)="filterSelectedAttributeNewScore($event)"
+                        required>
+              <mat-option *ngFor="let attribute of newScoreAttributes"
+                          [value]="attribute">
+                {{ attribute.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <mat-form-field appearance="fill"
+                          class="width-filter">
+            <mat-label>Score</mat-label>
+            <mat-select formControlName="controlNewScoreValue"
+                        required>
+              <mat-option *ngFor="let value of newScoreValues"
+                          [value]="value">
+                {{ value.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- <div class="form-group">
+        <div class="col-md-12">
+          <mat-form-field appearance="fill"
+                          class="width-filter">
+            <mat-label>Score</mat-label>
+            <input type="number"
+                   matInput
+                   min="1"
+                   max="10"
+                   name="score"
+                   id="score"
+                   formControlName="newScoreValue"
+                   required>
+          </mat-form-field>
+        </div>
+      </div>
+ -->
+    </form>
+  </div>
+
+  <div mat-dialog-actions
+       class="position-actions">
+    <button mat-raised-button
+            class="mat-button-cancel"
+            [mat-dialog-close]="false">Cancel</button>
+
+    <button mat-raised-button
+            class="mat-success"
+            color="primary"
+            type="submit"
+            form="newScoreForm"
+            cdkFocusInitial>Save</button>
+  </div>
+
+</ng-template>

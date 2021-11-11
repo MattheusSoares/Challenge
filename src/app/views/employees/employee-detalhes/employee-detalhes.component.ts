@@ -7,15 +7,19 @@ import { ContactsService } from '../../contacts/contacts.service';
 import { EmployeeService } from 'src/app/core/service/employee.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EChartOption } from 'echarts';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { EmployeeAttributeService } from 'src/app/core/service/employee-attribute.service';
+import { EmployeeAttributeService } from 'src/app/core/service/employee.attribute.service';
 import { AttributeService } from 'src/app/core/service/attribute.service';
 import { EmployeeAttribute } from 'src/app/core/models/employee-attribute.model';
 import { AttributeTypeService } from 'src/app/core/service/attibute.type.service';
 import { AttributeCategoryService } from 'src/app/core/service/attribute.category.service';
 import { TestComponentRenderer } from '@angular/core/testing';
 import { Attribute } from 'src/app/core/models/attribute.model';
+import { Employee } from 'src/app/core/models/employee.model';
+import { EmployeeRoleService } from 'src/app/core/service/employee.role.service';
+import { EmployeeRole } from 'src/app/core/models/employee-role.model';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
     selector: 'app-employee-detalhes',
@@ -25,8 +29,11 @@ import { Attribute } from 'src/app/core/models/attribute.model';
 
 export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
     @ViewChild(DatatableComponent, { static: false }) table2: DatatableComponent;
+
+    private readonly notifier: NotifierService;
+
     /* Pie Chart */
-    pie_chart: EChartOption = {
+    pieChart: EChartOption = {
         tooltip: {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -76,110 +83,266 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         public dialog: MatDialog,
         public contactsService: ContactsService,
         public employeeService: EmployeeService,
+        public employeeRoleService: EmployeeRoleService,
         public employeeAttributeService: EmployeeAttributeService,
         public attributeService: AttributeService,
         public attributeTypeService: AttributeTypeService,
         public attributeCategoryService: AttributeCategoryService,
         private snackBar: MatSnackBar,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        private notifierService: NotifierService) {
         super();
+        this.notifier = notifierService;
     }
+    employeelId: string;
+
+    newScoreForm: FormGroup;
+    controlNewScoreCategories: FormControl;
+    controlNewScoreTypes: FormControl;
+    controlNewScoreAttributes: FormControl;
+    controlNewScoreValue: FormControl;
+
+    newScoreAttributeCategories: any[];
+    newScoreAttributeTypes: any[];
+    newScoreAttributes: any[];
+    newScoreValues: any[];
+
+    employeeDisplay: any = {};
+    employee: Employee = new Employee();
+    employeeRoles: EmployeeRole[];
 
     listaEmployeeAttribute: EmployeeAttribute[];
     attributes: Attribute[];
+    listaEmployeeAttributeDiff: string[] = [];
+
+    tableContent: any[] = [];
 
     attributeCategories = new FormControl();
-    attributeCategoryList: string[] = [];
+    // attributeCategoryList: any[] = [];
 
-    attributeTypes = new FormControl();
-    attributeTypeList: string[] = [];
+    // attributeTypes = new FormControl();
+    // attributeTypeList: any[] = [];
+
+    filtersTypes: any[] = [];
+    filtersCategories: any[] = [];
 
     tb2columns = [
-        { prop : 'attributeName', name: 'Atributo' },
-        { prop : 'score', name: 'Avaliação' },
-        { prop : 'createdAt', name: 'Data da avaliação' }
+        { prop: 'attributeName', name: 'Attibute' },
+        { prop: 'score', name: 'Score' },
+        { prop: 'createdAt', name: 'Evaluation Date' }
     ];
     tb2data = [];
     tb2filteredData = [];
 
     ngOnInit() {
-        const employeelId = this.route.snapshot.paramMap.get('id');
+        this.controlNewScoreCategories = new FormControl();
+        this.controlNewScoreTypes = new FormControl();
+        this.controlNewScoreAttributes = new FormControl();
+        this.controlNewScoreValue = new FormControl();
+
+        this.employeelId = this.route.snapshot.paramMap.get('id');
+
         this.tb2fetch((data) => {
             this.tb2data = data;
             this.tb2filteredData = data;
         });
-        this.getEmployeeAttribute(employeelId);
-        this.getattributeTypeList();
-        this.getattributeCategoryList();
+        this.getEmployeeRoles(this.employeelId);
+
+
+        this.getEmployeeAttribute(this.employeelId);
+        // this.getattributeTypeList();
+        // this.getattributeCategoryList();
     }
 
-    getEmployeeAttribute(id: string){
+    getEmployeeData(id: string) {
+        this.employeeService.getById(id).subscribe(response => {
+            this.employee = response;
+
+            let employeeRole = "";
+            this.employeeRoles.forEach(element => {
+                if (this.employee.employeeRoleId === element.id) {
+                    employeeRole = element.description;
+                }
+            });
+
+            this.employeeDisplay = {
+                firstName: this.employee.firstName,
+                email: this.employee.email,
+                photoUrl: this.employee.photoUrl,
+                role: employeeRole
+            };
+        });
+    }
+
+    getEmployeeRoles(id: string) {
+        this.employeeRoleService.getAll().subscribe(response => {
+            this.getEmployeeData(id);
+            this.employeeRoles = response;
+        });
+    }
+
+    getEmployeeAttribute(id: string) {
         this.employeeAttributeService.getByEmployeeId(id).subscribe(response => {
             this.listaEmployeeAttribute = response;
-            console.log(this.listaEmployeeAttribute);
             this.getAllAttributes();
         });
     }
 
-    getattributeTypeList(){
-        this.attributeTypeService.getAll().subscribe(
-            response =>{
-                this.attributeTypeList = response.map(attributeType => attributeType.description)
-                console.log(response)
-            },
-            error => {
-                console.log(error)
-            }
-        )
+    filterSelect(event) {
+        if (event.value.length > 0) {
+            const tableContentFiltered = [];
+
+            this.tableContent.forEach(element => {
+                if (event.value.includes(element.attributeName)) {
+                    tableContentFiltered.push(element);
+                }
+            });
+
+            this.tb2data = tableContentFiltered;
+        }
+        else {
+            this.populateTb2();
+        }
     }
 
-    getattributeCategoryList(){
-        this.attributeCategoryService.getAll().subscribe(
-            response =>{
-                this.attributeCategoryList = response.map(attributeCategory => attributeCategory.description)
-                console.log(response)
-            },
-            error => {
-                console.log(error)
-            }
-        )
+    saveNewScore(modalNewScore) {
+        this.newScoreForm = new FormGroup({
+            controlNewScoreCategories: new FormControl(),
+            controlNewScoreTypes: new FormControl(),
+            controlNewScoreAttributes: new FormControl(),
+            controlNewScoreValue: new FormControl()
+        });
+
+        this.attributeCategoryService.getAll().subscribe(response => {
+            this.newScoreAttributeCategories = response;
+        });
+
+        const dialogRef = this.dialog.open(modalNewScore, {
+            width: '880px',
+        });
     }
 
-    getAllAttributes(){
-        this.attributeService.getAll().subscribe(
-            response =>{
-                this.attributes = response
-                console.log(response)
+    filterSelectedCategoryNewScore(event) {
+        this.newScoreAttributeTypes = [];
+        this.newScoreAttributes = [];
+        this.newScoreValues = [];
+        this.attributeTypeService.getByAttributeCategoryId(event.value.id).subscribe(response => {
+            this.newScoreAttributeTypes = response;
+        });
+    }
+
+    filterSelectedTypeNewScore(event) {
+        this.newScoreAttributes = [];
+        this.newScoreValues = [];
+        this.attributeService.getByAttributeTypeId(event.value.id).subscribe(response => {
+            this.newScoreAttributes = response;
+        });
+    }
+
+
+    filterSelectedAttributeNewScore(event) {
+        const scoreHelper = event.value.scoreHelper.split(";");
+        const allowedScores = event.value.allowedScores.split(";");
+
+        const newScoreValuesMapped = [];
+
+        allowedScores.forEach((allowedScoresValue, index) => {
+            const scoreHelperValue = scoreHelper[index];
+
+            newScoreValuesMapped.push({
+                score: allowedScoresValue,
+                description: scoreHelperValue
+            });
+        });
+
+        this.newScoreValues = newScoreValuesMapped;
+    }
+
+    onSubmit() {
+        if (this.newScoreForm.valid && this.newScoreForm.value != null) {
+            const payload = {
+                employeeId: this.employeelId,
+                attributeId: this.newScoreForm.value.controlNewScoreAttributes.id,
+                score: parseInt(this.newScoreForm.value.controlNewScoreValue.score, 10),
+            };
+
+            this.employeeAttributeService.postSaveEmployeeAttribute(payload).subscribe(response => {
+                this.notifier.notify('success', 'Score successfully saved!');
                 this.populateTb2();
+            },
+            (err) => {
+              this.notifier.notify('error', `There was an error while saving the new score.`);
+            });
 
+            this.dialog.closeAll();
+        }
+    }
+
+    // getattributeTypeList() {
+    //     this.attributeTypeService.getAll().subscribe(
+    //         response => {
+    //             this.attributeTypeList = response;
+    //             // console.log(response);
+    //         },
+    //         error => {
+    //             console.log(error);
+    //         }
+    //     );
+    // }
+
+    // getattributeCategoryList() {
+    //     this.attributeCategoryService.getAll().subscribe(
+    //         response => {
+    //             this.attributeCategoryList = response;
+    //             // console.log(response);
+    //         },
+    //         error => {
+    //             console.log(error);
+    //         }
+    //     );
+    // }
+
+    getAllAttributes() {
+        this.attributeService.getAll().subscribe(
+            response => {
+                this.attributes = response;
+                this.populateTb2();
             },
             error => {
-                console.log(error)
+                console.log(error);
             }
-        )
+        );
     }
+
 
     refresh() {
     }
 
-    populateTb2(){
-        let list = [];
+    populateTb2() {
+        this.tableContent = [];
+        this.listaEmployeeAttributeDiff = [];
+
         this.listaEmployeeAttribute.forEach(element => {
-            this.attributes.forEach(e =>{
-                if(e.id === element.attributeId){
-                    list.push({
+            this.attributes.forEach(attribute => {
+                if (attribute.id === element.attributeId) {
+                    this.listaEmployeeAttributeDiff.push(attribute.description);
+                    this.tableContent.push({
                         attributeId: element.attributeId,
-                        attributeName: e.description,
+                        attributeName: attribute.description,
                         createdAt: element.createdAt,
                         employeeId: element.employeeId,
                         id: element.id,
                         score: element.score
-                    })
+                    });
                 }
-            })
-        })
+            });
+        });
 
-        this.tb2data = list;
+        this.listaEmployeeAttributeDiff = this.listaEmployeeAttributeDiff.filter((item, pos) => {
+            return this.listaEmployeeAttributeDiff.indexOf(item) === pos;
+        });
+
+        this.tb2data = this.tableContent;
     }
 
     tb2fetch(cb) {

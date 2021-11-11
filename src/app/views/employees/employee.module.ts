@@ -34,7 +34,7 @@ import { NgxEchartsModule } from "ngx-echarts";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
 @NgModule({
-    imports: [
+  imports: [
     EmployeeRoutingModule,
     ComponentModule,
     CommonModule,
@@ -65,17 +65,17 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
       echarts: () => import('echarts')
     }),
 
-    ],
-    declarations: [
+  ],
+  declarations: [
     EmployeeComponent,
     EmployeeFormComponent,
     EmployeeDeleteComponent,
     EmployeeDetalhesComponent
-    ],
-    providers: [
-      SnackbarComponent,
-      { provide: OwlDateTimeIntl}, 
-      ContactsService
-    ],
-  })
-  export class EmployeeModule {}
+  ],
+  providers: [
+    SnackbarComponent,
+    { provide: OwlDateTimeIntl },
+    ContactsService
+  ],
+})
+export class EmployeeModule { }

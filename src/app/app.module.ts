@@ -30,6 +30,7 @@ import {
   HttpClient
 } from '@angular/common/http';
 import { WINDOW_PROVIDERS } from './core/service/window.service';
+import { EmployeeComparacaoComponent } from './views/employees/employee-comparacao/employee-comparacao.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,

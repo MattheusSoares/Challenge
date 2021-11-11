@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { OwlDateTimeIntl } from "ng-pick-datetime";
 import { ComponentModule } from "src/app/shared/components/component.module";
 import { SnackbarComponent } from "../ui/snackbar/snackbar.component";
-import { EmployeeRoutingModule } from "./employee-routing.module";
 import { EmployeeComponent } from "./employee.component";
 import { EmployeeFormComponent } from './form/form.component';
 import { EmployeeDeleteComponent } from './delete/delete.component';
@@ -29,6 +28,10 @@ import { MaterialFileInputModule } from "ngx-material-file-input";
 import { AdvanceTableRoutingModule } from "../advance-table/advance-table-routing.module";
 import { ContactsService } from "../contacts/contacts.service";
 import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes.component";
+import { EmployeeComparacaoComponent } from './employee-comparacao/employee-comparacao.component';
+import { TablesRoutingModule } from "../tables/tables-routing.module";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+import { EmployeeRoutingModule } from "./employee-routing.module";
 
 @NgModule({
     imports: [
@@ -55,13 +58,16 @@ import { EmployeeDetalhesComponent } from "./employee-detalhes/employee-detalhes
     MatToolbarModule,
     MaterialFileInputModule,
     MatMenuModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TablesRoutingModule,
+    NgxDatatableModule
     ],
     declarations: [
     EmployeeComponent,
     EmployeeFormComponent,
     EmployeeDeleteComponent,
-    EmployeeDetalhesComponent
+    EmployeeDetalhesComponent,
+    EmployeeComparacaoComponent
     ],
     providers: [
       SnackbarComponent,

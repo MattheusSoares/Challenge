@@ -57,20 +57,30 @@
                         <div class="col-4">
                           <ul class="header-buttons">
                             <li>
-                              <div class="icon-button-demo">
-                                <button mat-raised-button
+                              <!-- <div class="icon-button-demo">
+                                <button mat-mini-fab
                                         color="primary"
                                         [disabled]="!selection.hasValue()"
                                         (click)="detailsCall()">
                                   Comparar
                                 </button>
-                              </div>
+                              </div> -->
+                            </li>
+                            <li>
+                              <!-- <div class="icon-button-demo">
+                                <button mat-mini-fab
+                                        color="primary"
+                                        (click)="refresh()"> -->
+                                  <!-- <mat-icon class="col-white">refresh -->
+                                  <!-- </mat-icon> -->
+                                <!-- </button>
+                              </div> -->
                             </li>
                             <li>
                               <div class="icon-button-demo">
                                 <button mat-mini-fab
                                         color="primary"
-                                        (click)="refresh()">
+                                        (click)="detailsCall(this)">
                                   <mat-icon class="col-white">refresh
                                   </mat-icon>
                                 </button>
@@ -92,15 +102,16 @@
                                         [checked]="selection.hasValue() && isAllSelected()"
                                         [indeterminate]="selection.hasValue() && !isAllSelected()"
                                         [ngClass]="'tbl-checkbox'"
-                                        (click)="countSelected">
+                                        [disabled]="true">
                           </mat-checkbox>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row"
                                   [ngClass]="'tbl-col-width-per-6'">
-                          <mat-checkbox (click)="$event.stopPropagation()"
+                          <mat-checkbox (click)="$event.stopPropagation(); checkSelection()"
                                         (change)="$event ? selection.toggle(row) : null"
                                         [checked]="selection.isSelected(row)"
-                                        [ngClass]="'tbl-checkbox'">
+                                        [ngClass]="'tbl-checkbox'"
+                                        [disabled]="checkSelection">
                           </mat-checkbox>
                         </mat-cell>
                       </ng-container>

@@ -122,7 +122,6 @@ export class EmployeeComponent
   }
 
   detailsCall(row) {
-
     console.log("selection: ", this.selection);
     console.log("row: ", row);
     let tempDirection;
@@ -133,8 +132,7 @@ export class EmployeeComponent
     }
     this.dialog.open(EmployeeFormComponent, {
       data: {
-        contacts: row,
-        action: 'details'
+        action: this.selection.selected
       },
       direction: tempDirection,
       height: '70%',
@@ -218,6 +216,9 @@ export class EmployeeComponent
     return numSelected === numRows;
   }
 
+  countSeleted(){
+    console.log("selection: ", this.selection);
+  }
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     // this.isAllSelected()

@@ -60,8 +60,9 @@
                               <!-- <div class="icon-button-demo">
                                 <button mat-mini-fab
                                         color="primary"
-                                        (click)="addNew()">
-                                  <mat-icon class="col-white">add</mat-icon>
+                                        [disabled]="!selection.hasValue()"
+                                        (click)="detailsCall()">
+                                  Comparar
                                 </button>
                               </div> -->
                             </li>
@@ -180,7 +181,8 @@
                         <mat-cell *matCellDef="let row; let i=index;"
                                   class="psl-3 tbl-col-width-per-10">
                           <button mat-mini-fab
-                                  color="primary" (click)="onClickRoute(row)">
+                                  color="primary"
+                                  (click)="onClickRoute(row)">
                             <mat-icon class="col-white">info_outline
                             </mat-icon>
                           </button>

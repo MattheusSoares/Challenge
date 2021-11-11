@@ -3,10 +3,10 @@
       <div class="modalHeader">
         <div class="editRowModal">
           <div class="modalHeader clearfix">
-            <img [src]='contacts.img' alt="avatar">
+            <!-- <img [src]='contacts.img' alt="avatar"> -->
             <div class="modal-about">
               <div class="font-weight-bold p-t-5 font-17">
-                {{dialogTitle}}</div>
+                Comparar colaboradores</div>
             </div>
           </div>
         </div>
@@ -15,7 +15,15 @@
         </button>
       </div>
       <div mat-dialog-content>
-        <form class="register-form m-4" [formGroup]="contactsForm" (ngSubmit)="submit">
+        <div *ngFor="let employee of employees">
+          <div><b>Id: </b>  {{employee.id}}</div>
+          <div><b>Nome: </b>   {{employee.firstName}}</div>
+          <div><b>Email: </b>   {{employee.email}}</div>
+          <div>
+             <b>---------------------------------------</b>
+          </div>
+        </div>
+        <!-- <form class="register-form m-4" [formGroup]="contactsForm" (ngSubmit)="submit">
           <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
               <mat-form-field class="example-full-width mb-3" appearance="outline">
@@ -86,7 +94,7 @@
               </div>
             </div>
           </div>
-        </form>
+        </form> -->
       </div>
     </div>
     <div *ngIf="isDetails" class="contact-details">

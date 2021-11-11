@@ -15,7 +15,7 @@ import { EmployeeFormComponent } from './form/form.component';
 import { EmployeeDeleteComponent } from './delete/delete.component';
 import { ContactsService } from '../contacts/contacts.service';
 import { Employee } from 'src/app/core/models/employee.model';
-import { EmployeeService } from 'src/app/core/service/Employee.service';
+import { EmployeeService } from 'src/app/core/service/employee.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 
@@ -74,15 +74,15 @@ export class EmployeeComponent
     this.employeeService.getAll().subscribe(colaboradores => {
       this.employees = colaboradores;
       this.dataSource.data = this.employees;
-      console.log("dataSource.data: ", this.dataSource.data);
-      console.log("dataSource: ", this.dataSource);
+      // console.log("dataSource.data: ", this.dataSource.data);
+      // console.log("dataSource: ", this.dataSource);
     });
 
   }
 
   onClickRoute(event){
-    console.log("event: ", event)
-    //this.route.navigate([`/dashboard/main`]);
+    // console.log("event: ", event)
+    this.route.navigate([`/employee/detalhes/` + event.id]);
   }
 
   addNew() {
@@ -133,7 +133,7 @@ export class EmployeeComponent
     });
   }
   toggleStar(row) {
-    console.log(row);
+    // console.log(row);
   }
   editCall(row) {
     // this.id = row.id;
@@ -242,7 +242,7 @@ export class EmployeeComponent
   public loadData() {
     this.getEmployers();
 
-    console.log("datasource: ", this.dataSource);
+    // console.log("datasource: ", this.dataSource);
     this.subs.sink = fromEvent(this.filter.nativeElement, 'keyup')
       // .debounceTime(150)
       // .distinctUntilChanged()

@@ -17,7 +17,6 @@ export class EmployeeService {
   }
 
   getAll(): Observable<Employee[]> {
-      console.log('Teste')
     return this.http.get<Employee[]>(`${this.baseUrl}/Employee`);
   }
 

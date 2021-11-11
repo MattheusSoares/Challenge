@@ -4,6 +4,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EmployeeAttribute } from '../models/employee-attribute.model';
 import { ProcessEmployeeAttribute } from '../models/process-employee-attribubtes.model';
+import { ProcessRoleAttribute } from '../models/process-role-attributes';
 @Injectable({
   providedIn: 'root'
 })
@@ -26,5 +27,10 @@ export class EmployeeAttributeService {
     console.log("body: ", body)
     return this.http.post<ProcessEmployeeAttribute>(`${this.baseUrl}/EmployeeAttribute/process-employee-attributes`, body)
   }
+
+  getByEmployeeRoleProcessAttributes(body: any): Observable<ProcessRoleAttribute> {
+    return this.http.post<ProcessRoleAttribute>(`${this.baseUrl}/EmployeeAttribute/process-employee-role-attributes`, body)
+  }
+
 
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Attribute } from '../models/attribute.model';
@@ -20,7 +20,11 @@ export class AttributeService {
   }
 
   getAllArray(typeArray): Observable<Attribute[]> {
-    return this.http.get<Attribute[]>(`${this.baseUrl}/Attribute/attribute-types`, {params: typeArray});
+    let params = new HttpParams(); 
+    typeArray.forEach(item =>{
+      params = params.append('attributeTypeIds', item);
+    })
+    return this.http.get<Attribute[]>(`${this.baseUrl}/Attribute/attribute-types`, {params});
   }
 
 }

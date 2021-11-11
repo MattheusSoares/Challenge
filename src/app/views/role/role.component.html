@@ -32,98 +32,146 @@
                                 <mat-form-field class="example-full-width"
                                                 appearance="fill">
                                     <mat-label>Roles</mat-label>
-                                    <mat-select>
-                                        <mat-option value=3>
-                                            Tech Lead
-                                        </mat-option>
-                                        <mat-option value=0>
-                                            Backend
-                                        </mat-option>
-                                        <mat-option value=1>
-                                            Fronted
+                                    <mat-select [formControl]="roleForm">
+                                        <mat-option *ngFor="let role of roles"
+                                                    [value]="role.id">
+                                            {{role.description}}
                                         </mat-option>
                                     </mat-select>
                                     <mat-icon matSuffix>trending_up</mat-icon>
                                 </mat-form-field>
                             </div>
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                                 <mat-form-field class="example-full-width"
                                                 appearance="fill">
                                     <mat-label>Categorias</mat-label>
-                                    <mat-select multiple>
-                                        <mat-option value=3>
-                                            Tech Lead
-                                        </mat-option>
-                                        <mat-option value=0>
-                                            Backend
-                                        </mat-option>
-                                        <mat-option value=1>
-                                            Fronted
+                                    <mat-select [formControl]="categoriesForm"
+                                                multiple>
+                                        <mat-option *ngFor="let category of categories"
+                                                    [value]="category.id"
+                                                    (click)="onClickSearchType()">
+                                            {{category.description}}
                                         </mat-option>
                                     </mat-select>
                                     <mat-icon matSuffix>trending_up</mat-icon>
                                 </mat-form-field>
                             </div>
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                                 <mat-form-field class="example-full-width"
                                                 appearance="fill">
                                     <mat-label>Tipos</mat-label>
-                                    <mat-select multiple>
-                                        <mat-option value=3>
-                                            Tech Lead
-                                        </mat-option>
-                                        <mat-option value=0>
-                                            Backend
-                                        </mat-option>
-                                        <mat-option value=1>
-                                            Fronted
+                                    <mat-select [formControl]="typesForm"
+                                                multiple>
+                                        <mat-option *ngFor="let type of types"
+                                                    [value]="type.id"
+                                                    (click)="onClickSearchAttributes()">
+                                            {{type.description}}
                                         </mat-option>
                                     </mat-select>
                                     <mat-icon matSuffix>trending_up</mat-icon>
                                 </mat-form-field>
                             </div>
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                            <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 mb-2">
                                 <mat-form-field class="example-full-width"
                                                 appearance="fill">
                                     <mat-label>Atributos</mat-label>
-                                    <mat-select multiple>
-                                        <mat-option value=3>
-                                            Tech Lead
-                                        </mat-option>
-                                        <mat-option value=0>
-                                            Backend
-                                        </mat-option>
-                                        <mat-option value=1>
-                                            Fronted
+                                    <mat-select [formControl]="attributesForm"
+                                                multiple>
+                                        <mat-option *ngFor="let attribute of attributes"
+                                                    [value]="attribute.id">
+                                            {{attribute.description}}
                                         </mat-option>
                                     </mat-select>
                                     <mat-icon matSuffix>trending_up</mat-icon>
                                 </mat-form-field>
                             </div>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                                <button style="width: 100%; margin-top: 5%;" mat-raised-button
+                                    color="primary"
+                                    (click)="onClickSearch()">Buscar <mat-icon>search</mat-icon></button>
+                            </div>
+
+                            
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>
-                                            <strong>Polar</strong> Chart
-                                        </h2>
-                                    </div>
-                                    <div class="body">
-                                        <div class="recent-report__chart">
-                                            <canvas baseChart
-                                                    class="chart"
-                                                    [data]="polarAreaChartData"
-                                                    [options]="polarChartOptions"
-                                                    [labels]="polarAreaChartLabels"
-                                                    [legend]="polarAreaLegend"
-                                                    [chartType]="polarAreaChartType"
-                                                    [colors]="ploarChartColors"></canvas>
+                        <mat-tab-group>
+                            <mat-tab label="Todos os registros">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                </div>
+                                                <div class="body">
+                                                    <div class="recent-report__chart">
+                                                        <canvas baseChart
+                                                                class="chart"
+                                                                [data]="polarAreaChartData"
+                                                                [options]="polarChartOptions"
+                                                                [labels]="polarAreaChartLabels"
+                                                                [legend]="polarAreaLegend"
+                                                                [chartType]="polarAreaChartType"
+                                                                [colors]="ploarChartColors"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+
+                            </mat-tab>
+                            <mat-tab label="Últimos 5 registros">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                </div>
+                                                <div class="body">
+                                                    <div class="recent-report__chart">
+                                                        <canvas baseChart
+                                                                class="chart"
+                                                                [data]="polarAreaChartData2"
+                                                                [options]="polarChartOptions"
+                                                                [labels]="polarAreaChartLabels"
+                                                                [legend]="polarAreaLegend"
+                                                                [chartType]="polarAreaChartType"
+                                                                [colors]="ploarChartColors"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </mat-tab>
+                            <mat-tab label="Últimos 10 registros">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                </div>
+                                                <div class="body">
+                                                    <div class="recent-report__chart">
+                                                        <canvas baseChart
+                                                                class="chart"
+                                                                [data]="polarAreaChartData3"
+                                                                [options]="polarChartOptions"
+                                                                [labels]="polarAreaChartLabels"
+                                                                [legend]="polarAreaLegend"
+                                                                [chartType]="polarAreaChartType"
+                                                                [colors]="ploarChartColors"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </mat-tab>
+
+                        </mat-tab-group>
+
                         <div class="row">
                             <mat-table #table
                                        [dataSource]="dataSource"
@@ -132,13 +180,13 @@
 
                                 <ng-container matColumnDef="pathPhoto">
                                     <mat-header-cell *matHeaderCellDef
-                                                     mat-sort-header>
+                                                     mat-sort-header style="max-width: 20%;">
                                     </mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> <img styles="padding: 5px"
+                                    <mat-cell *matCellDef="let row" style="max-width: 20%;"> <img styles="padding: 5px"
                                              alt="image"
                                              class="msr-3 rounded-circle"
                                              width="40"
-                                             src="{{row.photoUrl}}"></mat-cell>
+                                             src="{{row.photoUrl}}" ></mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="firstName">
@@ -151,12 +199,28 @@
                                 <ng-container matColumnDef="email">
                                     <mat-header-cell *matHeaderCellDef
                                                      mat-sort-header
-                                                     style="min-width: 40%;">Email
-                                                     
+                                                     >Email
+
                                     </mat-header-cell>
-                                    <mat-cell  style="min-width: 40%;" *matCellDef="let row"> {{row.email}}
+                                    <mat-cell style="min-width: 10%;"
+                                              *matCellDef="let row"> {{row.email}}
                                     </mat-cell>
                                 </ng-container>
+                                <ng-container matColumnDef="details">
+                                    <mat-header-cell class="psl-3 tbl-col-width-per-10"
+                                                     *matHeaderCellDef style="min-width: 20%;">
+                                                     Detalhes
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i=index;"
+                                              class="psl-3 tbl-col-width-per-10" style="min-width: 20%;">
+                                      <button mat-mini-fab
+                                              color="primary" (click)="onClickRoute(row)">
+                                        <mat-icon class="col-white">info_outline
+                                        </mat-icon>
+                                      </button>
+            
+                                    </mat-cell>
+                                  </ng-container>
 
                                 <mat-header-row *matHeaderRowDef="displayedColumns">
                                 </mat-header-row>

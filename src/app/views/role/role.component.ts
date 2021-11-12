@@ -74,7 +74,7 @@ export class RoleComponent implements OnInit {
   public polarAreaLegend = true;
   public ploarChartColors: any[] = [
     {
-      backgroundColor: ['#60A3F6', '#7C59E7', '#DD6811', '#5BCFA5', '#FF23FC']
+      backgroundColor: ['#60A3F6', '#7C59E7', '#DD6811', '#5BCFA5', '#FF23FC', '#00b050']
     }
   ];
 

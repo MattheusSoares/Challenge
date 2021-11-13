@@ -32,52 +32,6 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
 
     private readonly notifier: NotifierService;
 
-    /* Pie Chart */
-    pieChart: EChartOption = {
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-            data: ['Data 1', 'Data 2', 'Data 3', 'Data 4', 'Data 5'],
-            textStyle: {
-                color: '#9aa0ac',
-                padding: [0, 5, 0, 5]
-            }
-        },
-
-        series: [
-            {
-                name: 'Chart Data',
-                type: 'pie',
-                radius: '55%',
-                center: ['50%', '48%'],
-                data: [
-                    {
-                        value: 335,
-                        name: 'Data 1'
-                    },
-                    {
-                        value: 310,
-                        name: 'Data 2'
-                    },
-                    {
-                        value: 234,
-                        name: 'Data 3'
-                    },
-                    {
-                        value: 135,
-                        name: 'Data 4'
-                    },
-                    {
-                        value: 548,
-                        name: 'Data 5'
-                    }
-                ]
-            }
-        ],
-        color: ['#575B7A', '#DE725C', '#DFC126', '#72BE81', '#50A5D8']
-    };
     constructor(
         public httpClient: HttpClient,
         public dialog: MatDialog,
@@ -95,6 +49,8 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.notifier = notifierService;
     }
     employeelId: string;
+
+    attributeSelected: string;
 
     newScoreForm: FormGroup;
     controlNewScoreCategories: FormControl;
@@ -116,8 +72,12 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     listaEmployeeAttributeDiff: string[] = [];
 
     tableContent: any[] = [];
+    chartContent: any[] = [];
+
+    chart1: EChartOption;
 
     attributeCategories = new FormControl();
+    attributeCategoriesCharts = new FormControl();
     // attributeCategoryList: any[] = [];
 
     // attributeTypes = new FormControl();
@@ -127,12 +87,15 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     filtersCategories: any[] = [];
 
     tb2columns = [
-        { prop: 'attributeName', name: 'Attibute' },
-        { prop: 'score', name: 'Score' },
-        { prop: 'createdAt', name: 'Evaluation Date' }
+        { prop: 'attributeName', name: 'Attibute', width: 150 },
+        { prop: 'score', name: 'Score', width: 50 },
+        { prop: 'dateDisplay', name: 'Evaluation Date', width: 100 }
     ];
     tb2data = [];
     tb2filteredData = [];
+
+    chartData = [];
+    chartDataFiltered = [];
 
     ngOnInit() {
         this.controlNewScoreCategories = new FormControl();
@@ -141,17 +104,9 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.controlNewScoreValue = new FormControl();
 
         this.employeelId = this.route.snapshot.paramMap.get('id');
-
-        this.tb2fetch((data) => {
-            this.tb2data = data;
-            this.tb2filteredData = data;
-        });
         this.getEmployeeRoles(this.employeelId);
 
-
         this.getEmployeeAttribute(this.employeelId);
-        // this.getattributeTypeList();
-        // this.getattributeCategoryList();
     }
 
     getEmployeeData(id: string) {
@@ -188,6 +143,20 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         });
     }
 
+    filterSelectChart(event) {
+        this.attributeSelected = event.value;
+        const chartDataFilteredSelected = [];
+
+        this.chartData.forEach(element => {
+            if (element.attributeName === this.attributeSelected) {
+                chartDataFilteredSelected.push(element);
+            }
+        });
+
+        this.chartDataFiltered = chartDataFilteredSelected;
+        this.chart1 = this.populateChart(this.chartDataFiltered);
+    }
+
     filterSelect(event) {
         if (event.value.length > 0) {
             const tableContentFiltered = [];
@@ -197,7 +166,6 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                     tableContentFiltered.push(element);
                 }
             });
-
             this.tb2data = tableContentFiltered;
         }
         else {
@@ -270,43 +238,20 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                 this.notifier.notify('success', 'Score successfully saved!');
                 this.populateTb2();
             },
-            (err) => {
-              this.notifier.notify('error', `There was an error while saving the new score.`);
-            });
+                (err) => {
+                    this.notifier.notify('error', `There was an error while saving the new score.`);
+                });
 
             this.dialog.closeAll();
         }
     }
-
-    // getattributeTypeList() {
-    //     this.attributeTypeService.getAll().subscribe(
-    //         response => {
-    //             this.attributeTypeList = response;
-    //             // console.log(response);
-    //         },
-    //         error => {
-    //             console.log(error);
-    //         }
-    //     );
-    // }
-
-    // getattributeCategoryList() {
-    //     this.attributeCategoryService.getAll().subscribe(
-    //         response => {
-    //             this.attributeCategoryList = response;
-    //             // console.log(response);
-    //         },
-    //         error => {
-    //             console.log(error);
-    //         }
-    //     );
-    // }
 
     getAllAttributes() {
         this.attributeService.getAll().subscribe(
             response => {
                 this.attributes = response;
                 this.populateTb2();
+                this.populateChartData();
             },
             error => {
                 console.log(error);
@@ -314,6 +259,33 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         );
     }
 
+    populateChartData() {
+        this.chartContent = [];
+        this.listaEmployeeAttributeDiff = [];
+
+        this.listaEmployeeAttribute.forEach(element => {
+            this.attributes.forEach(attribute => {
+                if (attribute.id === element.attributeId) {
+                    this.listaEmployeeAttributeDiff.push(attribute.description);
+                    this.chartContent.push({
+                        attributeId: element.attributeId,
+                        attributeName: attribute.description,
+                        createdAt: element.createdAt,
+                        dateDisplay: this.formatDate(element.createdAt),
+                        employeeId: element.employeeId,
+                        id: element.id,
+                        score: element.score
+                    });
+                }
+            });
+        });
+
+        this.listaEmployeeAttributeDiff = this.listaEmployeeAttributeDiff.filter((item, pos) => {
+            return this.listaEmployeeAttributeDiff.indexOf(item) === pos;
+        });
+
+        this.chartData = this.chartContent;
+    }
 
     refresh() {
     }
@@ -330,6 +302,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                         attributeId: element.attributeId,
                         attributeName: attribute.description,
                         createdAt: element.createdAt,
+                        dateDisplay: this.formatDate(element.createdAt),
                         employeeId: element.employeeId,
                         id: element.id,
                         score: element.score
@@ -345,40 +318,39 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.tb2data = this.tableContent;
     }
 
-    tb2fetch(cb) {
-        const req = new XMLHttpRequest();
-        req.open('GET', 'assets/data/ngx-data.json');
-        req.onload = () => {
-            const data = JSON.parse(req.response);
-            cb(data);
+    formatDate(value) {
+        const date = new Date(value);
+        const day = date.toLocaleString('default', { day: '2-digit' });
+        const month = date.toLocaleString('default', { month: 'long' });
+        const year = date.toLocaleString('default', { year: 'numeric' });
+        return day + ' de ' + (month.charAt(0).toUpperCase() + month.slice(1)) + ' de ' + year;
+    }
+
+
+    populateChart(chartData): EChartOption {
+        const chartOptions: EChartOption = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    // Use axis to trigger tooltip
+                    type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: chartData.map(x => x.dateDisplay)
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: chartData.map(x => x.score),
+                    type: 'bar'
+                }
+            ]
         };
-        req.send();
+
+        return chartOptions;
     }
-
-    tb2filterDatatable(event) {
-        // get the value of the key pressed and make it lowercase
-        const val = event.target.value.toLowerCase();
-        // get the amount of columns in the table
-        const colsAmt = this.tb2columns.length;
-        // get the key names of each column in the dataset
-        const keys = Object.keys(this.tb2filteredData[0]);
-        // assign filtered matches to the active datatable
-        // this.tb2data = this.tb2filteredData.filter(function (item) {
-        //     // iterate through each row's column data
-        //     for (let i = 0; i < colsAmt; i++) {
-        //         // check for a match
-        //         if (
-        //             item[keys[i]].toString().toLowerCase().indexOf(val) !== -1 ||
-        //             !val
-        //         ) {
-        //             // found match, return true to add to result set
-        //             return true;
-        //         }
-        //     }
-        // });
-
-        // whenever the filter changes, always go back to the first page
-        this.table2.offset = 0;
-    }
-
 }

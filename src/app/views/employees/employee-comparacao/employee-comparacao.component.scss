@@ -16,6 +16,16 @@
     margin-bottom: 0px !important;
 } 
 
+.header2 {
+    padding: 0px 0px;
+    -webkit-box-align: center;
+    align-items: center;
+    border-color: #ffffff;
+    background-color: #ffffff;
+    height: 70px;
+    min-width: 800px;
+    margin-bottom: 0px !important;
+} 
 .atributo-header{
     height: 70px;
     width: 23%;
@@ -33,4 +43,8 @@
     border: 1px solid rgba(52, 73, 94, 0.44);
     padding: 2px;
     box-shadow: 0 5px 25px 0 rgb(0 0 0 / 20%);
+}
+
+.col-def{
+    max-width: 30%;
 }

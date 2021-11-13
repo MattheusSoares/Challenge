@@ -90,6 +90,7 @@
                                         <button style="width: 100%; margin-top: 5%;"
                                                 mat-raised-button
                                                 color="primary"
+                                                [disabled]="!isValid()"
                                                 (click)="onClickSearch()">Buscar <mat-icon>search</mat-icon></button>
                                     </div>
 
@@ -222,12 +223,12 @@
                                     <ng-container matColumnDef="details">
                                         <mat-header-cell class="psl-3 tbl-col-width-per-10"
                                                          *matHeaderCellDef
-                                                         style="min-width: 20%;">
+                                                         style="min-width: 15%;">
                                             Detalhes
                                         </mat-header-cell>
                                         <mat-cell *matCellDef="let row; let i=index;"
                                                   class="psl-3 tbl-col-width-per-10"
-                                                  style="min-width: 20%;">
+                                                  style="min-width: 15%;">
                                             <button mat-mini-fab
                                                     color="primary"
                                                     (click)="onClickRoute(row)">

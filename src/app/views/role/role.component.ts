@@ -142,9 +142,9 @@ export class RoleComponent implements OnInit {
       let data3 = []; 
       let labels = [];
       this.processRoleAttributes.processedEmployeeRoleAttributes.forEach(item => {
-        data.push(item?.averageScore);
-        data2.push(item?.averageScoreLast5);
-        data3.push(item?.averageScoreLast10);
+        data.push(Math.round(item?.averageScore * 10)/10);
+        data2.push(Math.round(item?.averageScoreLast5 * 10)/10);
+        data3.push(Math.round(item?.averageScoreLast10 * 10)/10);
         labels.push(this.attributes.find(el => el.id === item.attributeId).description);
       })
       this.polarAreaChartData = data;
@@ -178,6 +178,16 @@ export class RoleComponent implements OnInit {
 
   onClickRoute(event){
     this.route.navigate([`/employee/detalhes/` + event.id]);
+  }
+
+  isValid() : boolean{
+    debugger
+    if(this.roleForm.value && this.typesForm.value && this.attributesForm.value && this.categoriesForm.value ){
+      if(this.typesForm.value.length > 0 && this.attributesForm.value.length > 0 && this.categoriesForm.value.length > 0)
+      return true
+    } else {
+      return false
+    }
   }
 }
 

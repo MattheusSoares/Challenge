@@ -71,12 +71,21 @@
                                 <button mat-mini-fab
                                         color="primary"
                                         (click)="refresh()"> -->
-                                  <!-- <mat-icon class="col-white">refresh -->
-                                  <!-- </mat-icon> -->
-                                <!-- </button>
+                              <!-- <mat-icon class="col-white">refresh -->
+                              <!-- </mat-icon> -->
+                              <!-- </button>
                               </div> -->
                             </li>
                             <li>
+                              <div class="icon-button-demo">
+                                <button mat-raised-button
+                                (click)="onClickSearch()"
+                                        color="primary">Comparar</button>
+                              </div>
+
+                            </li>
+                            <li>
+
                               <div class="icon-button-demo">
                                 <button mat-mini-fab
                                         color="primary"
@@ -102,7 +111,7 @@
                                         [checked]="selection.hasValue() && isAllSelected()"
                                         [indeterminate]="selection.hasValue() && !isAllSelected()"
                                         [ngClass]="'tbl-checkbox'"
-                                        [disabled]="true">
+                                        [disabled]="!isValidSelect()">
                           </mat-checkbox>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row"
@@ -111,7 +120,7 @@
                                         (change)="$event ? selection.toggle(row) : null"
                                         [checked]="selection.isSelected(row)"
                                         [ngClass]="'tbl-checkbox'"
-                                        [disabled]="checkSelection">
+                                        [disabled]="isValidSelect()">
                           </mat-checkbox>
                         </mat-cell>
                       </ng-container>

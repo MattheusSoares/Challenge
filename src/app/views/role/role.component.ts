@@ -66,7 +66,6 @@ export class RoleComponent implements OnInit {
   @ViewChild('filter', { static: true }) filter: ElementRef;
 
   ngOnInit(): void {
-    debugger
     if (this.activatedRoute.snapshot.paramMap.get('id')) {
       this.getRoles();
       this.dataSource.data = [];
@@ -203,6 +202,13 @@ export class RoleComponent implements OnInit {
     } else {
       return false
     }
+  }
+
+  isOptionDisabled(opt: any) : boolean{
+    if(this.attributesForm.value){
+      return this.attributesForm.value.length >= 6 && !this.attributesForm.value.find(el => el == opt)
+    }
+    
   }
 }
 

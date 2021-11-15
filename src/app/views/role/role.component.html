@@ -79,7 +79,8 @@
                                             <mat-select [formControl]="attributesForm"
                                                         multiple>
                                                 <mat-option *ngFor="let attribute of attributes"
-                                                            [value]="attribute.id">
+                                                            [value]="attribute.id"
+                                                            [disabled]="isOptionDisabled(attribute.id)">
                                                     {{attribute.description}}
                                                 </mat-option>
                                             </mat-select>

@@ -107,6 +107,14 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     newScoreAttributes: any[];
     newScoreValues: any[];
 
+    scoreLegend: any[] = [
+        "1-Basic",
+        "3-Basic/Medium",
+        "5-Medium",
+        "7-Medium/Advanced",
+        "10-Advanced"
+    ]
+
     employeeDisplay: any = {};
     employee: Employee = new Employee();
     employeeRoles: EmployeeRole[];
@@ -270,9 +278,9 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                 this.notifier.notify('success', 'Score successfully saved!');
                 this.populateTb2();
             },
-            (err) => {
-              this.notifier.notify('error', `There was an error while saving the new score.`);
-            });
+                (err) => {
+                    this.notifier.notify('error', `There was an error while saving the new score.`);
+                });
 
             this.dialog.closeAll();
         }

@@ -14,7 +14,7 @@ const routes: Routes = [
     component: EmployeeDetalhesComponent
   },
   {
-    path: 'comparacao',
+    path: 'comparacao/:id/:id2',
     component: EmployeeComparacaoComponent
   }
 ];

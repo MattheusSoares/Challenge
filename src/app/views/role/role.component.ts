@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from 'src/app/core/models/category.model';
 import { EmployeeType } from 'src/app/core/models/type.model';
 import { Employee } from 'src/app/core/models/employee.model';
@@ -46,6 +46,8 @@ export class RoleComponent implements OnInit {
   attributesForm = new FormControl();
   roleForm = new FormControl();
 
+  roleDefault: Role;
+
   constructor(
     public dialog: MatDialog,
     public employeeService: EmployeeService,
@@ -55,7 +57,8 @@ export class RoleComponent implements OnInit {
     public employeeAttributeService: EmployeeAttributeService,
     public typeService: TypeService,
     private snackBar: MatSnackBar,
-    private route: Router
+    private route: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -63,6 +66,14 @@ export class RoleComponent implements OnInit {
   @ViewChild('filter', { static: true }) filter: ElementRef;
 
   ngOnInit(): void {
+    if (this.activatedRoute.snapshot.paramMap.get('id')) {
+      this.getRoles();
+      this.dataSource.data = [];
+      this.employeeService.getByEmployeeRoleId(this.activatedRoute.snapshot.paramMap.get('id')).subscribe(colaboradores => {
+        this.employees = colaboradores;
+        this.dataSource.data = this.employees;
+      });
+    }
     this.getRoles();
     this.getCategoria();
   }
@@ -74,7 +85,7 @@ export class RoleComponent implements OnInit {
   public polarAreaLegend = true;
   public ploarChartColors: any[] = [
     {
-      backgroundColor: ['#60A3F6', '#7C59E7', '#DD6811', '#5BCFA5', '#FF23FC']
+      backgroundColor: ['#60A3F6', '#7C59E7', '#DD6811', '#5BCFA5', '#FF23FC', '#00b050']
     }
   ];
 
@@ -101,7 +112,7 @@ export class RoleComponent implements OnInit {
 
   getEmployees() {
     this.dataSource.data = [];
-    this.employeeService.getByEmployeeRoleId(this.roleForm.value).subscribe(colaboradores => {
+    this.employeeService.getByEmployeeRoleId(this.roleForm.value.id).subscribe(colaboradores => {
       this.employees = colaboradores;
       this.dataSource.data = this.employees;
     });
@@ -110,6 +121,10 @@ export class RoleComponent implements OnInit {
   getRoles() {
     this.roleService.getAll().subscribe(roles => {
       this.roles = roles;
+      if (this.activatedRoute.snapshot.paramMap.get('id')) {
+        this.roleDefault = this.roles.find(el => el.id === this.activatedRoute.snapshot.paramMap.get('id'));
+        this.roleForm.setValue(this.roleDefault);
+      }
     });
   }
 
@@ -130,21 +145,21 @@ export class RoleComponent implements OnInit {
     });
   }
 
-  getByEmployeeRoleProcessAttributes(){
-    this.polarAreaChartData = []; 
+  getByEmployeeRoleProcessAttributes() {
+    this.polarAreaChartData = [];
     this.polarAreaChartLabels = [];
-    this.requestBodyProcess.employeeRoleId = this.roleForm.value;
+    this.requestBodyProcess.employeeRoleId = this.roleForm.value.id;
     this.requestBodyProcess.attributeIds = this.attributesForm.value;
     this.employeeAttributeService.getByEmployeeRoleProcessAttributes(this.requestBodyProcess).subscribe(processData => {
       this.processRoleAttributes = processData;
-      let data = []; 
-      let data2 = []; 
-      let data3 = []; 
+      let data = [];
+      let data2 = [];
+      let data3 = [];
       let labels = [];
       this.processRoleAttributes.processedEmployeeRoleAttributes.forEach(item => {
-        data.push(item?.averageScore);
-        data2.push(item?.averageScoreLast5);
-        data3.push(item?.averageScoreLast10);
+        data.push(Math.round(item?.averageScore * 10) / 10);
+        data2.push(Math.round(item?.averageScoreLast5 * 10) / 10);
+        data3.push(Math.round(item?.averageScoreLast10 * 10) / 10);
         labels.push(this.attributes.find(el => el.id === item.attributeId).description);
       })
       this.polarAreaChartData = data;
@@ -167,17 +182,33 @@ export class RoleComponent implements OnInit {
     this.getTypes();
   }
 
-  onClickSearchAttributes(){
+  onClickSearchAttributes() {
     this.getAttributes();
   }
 
-  onClickSearch(){
+  onClickSearch() {
     this.getEmployees()
     this.getByEmployeeRoleProcessAttributes();
   }
 
-  onClickRoute(event){
+  onClickRoute(event) {
     this.route.navigate([`/employee/detalhes/` + event.id]);
+  }
+
+  isValid(): boolean {
+    if (this.roleForm.value && this.typesForm.value && this.attributesForm.value && this.categoriesForm.value) {
+      if (this.typesForm.value.length > 0 && this.attributesForm.value.length > 0 && this.categoriesForm.value.length > 0)
+        return true
+    } else {
+      return false
+    }
+  }
+
+  isOptionDisabled(opt: any) : boolean{
+    if(this.attributesForm.value){
+      return this.attributesForm.value.length >= 6 && !this.attributesForm.value.find(el => el == opt)
+    }
+    
   }
 }
 

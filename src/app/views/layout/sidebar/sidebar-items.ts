@@ -1,52 +1,52 @@
 import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
-  {
-    path: '',
-    title: 'MENUITEMS.MAIN.TEXT',
-    moduleName: '',
-    icon: '',
-    class: '',
-    groupTitle: true,
-    submenu: []
-  },
-  {
-    path: '',
-    title: 'MENUITEMS.HOME.TEXT',
-    moduleName: 'dashboard',
-    icon: 'fas fa-tachometer-alt',
-    class: 'menu-toggle',
-    groupTitle: false,
-    submenu: [
-      {
-        path: 'dashboard/main',
-        title: 'MENUITEMS.HOME.LIST.DASHBOARD1',
-        moduleName: 'dashboard',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        submenu: []
-      },
-      {
-        path: 'dashboard/dashboard2',
-        title: 'MENUITEMS.HOME.LIST.DASHBOARD2',
-        moduleName: 'dashboard',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        submenu: []
-      },
-      {
-        path: 'dashboard/dashboard3',
-        title: 'MENUITEMS.HOME.LIST.DASHBOARD3',
-        moduleName: 'dashboard',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        submenu: []
-      }
-    ]
-  },
+  // {
+  //   path: '',
+  //   title: 'MENUITEMS.MAIN.TEXT',
+  //   moduleName: '',
+  //   icon: '',
+  //   class: '',
+  //   groupTitle: true,
+  //   submenu: []
+  // },
+  // {
+  //   path: '',
+  //   title: 'MENUITEMS.HOME.TEXT',
+  //   moduleName: 'dashboard',
+  //   icon: 'fas fa-tachometer-alt',
+  //   class: 'menu-toggle',
+  //   groupTitle: false,
+  //   submenu: [
+  //     {
+  //       path: 'dashboard/main',
+  //       title: 'MENUITEMS.HOME.LIST.DASHBOARD1',
+  //       moduleName: 'dashboard',
+  //       icon: '',
+  //       class: 'ml-menu',
+  //       groupTitle: false,
+  //       submenu: []
+  //     },
+  //     {
+  //       path: 'dashboard/dashboard2',
+  //       title: 'MENUITEMS.HOME.LIST.DASHBOARD2',
+  //       moduleName: 'dashboard',
+  //       icon: '',
+  //       class: 'ml-menu',
+  //       groupTitle: false,
+  //       submenu: []
+  //     },
+  //     {
+  //       path: 'dashboard/dashboard3',
+  //       title: 'MENUITEMS.HOME.LIST.DASHBOARD3',
+  //       moduleName: 'dashboard',
+  //       icon: '',
+  //       class: 'ml-menu',
+  //       groupTitle: false,
+  //       submenu: []
+  //     }
+  //   ]
+  // },
   // {
   //   path: 'advance-table',
   //   title: 'MENUITEMS.ADVANCE-TABLE.TEXT',
@@ -83,15 +83,15 @@ export const ROUTES: RouteInfo[] = [
   //   groupTitle: false,
   //   submenu: []
   // },
-  {
-    path: 'contacts',
-    title: 'MENUITEMS.CONTACTS.TEXT',
-    moduleName: 'contacts',
-    icon: 'far fa-address-card',
-    class: '',
-    groupTitle: false,
-    submenu: []
-  },
+  // {
+  //   path: 'contacts',
+  //   title: 'MENUITEMS.CONTACTS.TEXT',
+  //   moduleName: 'contacts',
+  //   icon: 'far fa-address-card',
+  //   class: '',
+  //   groupTitle: false,
+  //   submenu: []
+  // },
   {
     path: 'employee',
     title: 'Colaboradores',

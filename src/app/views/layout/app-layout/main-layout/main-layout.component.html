@@ -2,10 +2,10 @@
 <app-sidebar></app-sidebar>
 <app-right-sidebar></app-right-sidebar>
 <router-outlet></router-outlet>
-<div style="position: fixed; right: 0; bottom: 0; margin-right: 15px; margin-bottom: 10px;" ngbDropdown>
-    <button class="custom-class-or-id" mat-icon-button ngbDropdownToggle>
-        <mat-icon>help_outlined</mat-icon>
-        <!-- <img style="height: 150px; width: 150px;" src="https://media.istockphoto.com/vectors/chatbot-icon-bot-sign-design-chat-bot-logo-concept-robot-head-in-vector-id927406374" style="position: relative; float: right; width: 25px;"> -->
+<div style="position: fixed; right: 0; bottom: 0; margin-right: 20px; margin-bottom: 10px; z-index: 9999;" ngbDropdown>
+    <button style="width: 80px; height: 40px;" class="custom-class-or-id" mat-icon-button ngbDropdownToggle>
+        <!-- <mat-icon>help_outlined</mat-icon> -->
+        <img src="https://www.svgrepo.com/show/30827/chat.svg" style="position: relative; float: right; width: 40px;">
     </button>
     <div ngbDropdownMenu>
         <iframe style="height:480px; width:402px" src="https://webchat.botframework.com/embed/challenger-bot/gemini?b=challenger-bot&s=WNXiSjeO0FY.QFqPIU_o_uTgpd6kt6mkRP6-hqCng6C7-ssc4QvDMFE&username=You"></iframe>

@@ -26,7 +26,7 @@ export class SigninComponent
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       email: [
-        'admin@lorax.com',
+        'marcos.baiao@deal.com.br',
         [Validators.required, Validators.email, Validators.minLength(5)]
       ],
       password: ['admin', Validators.required]

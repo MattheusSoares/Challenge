@@ -14,10 +14,10 @@ import { User } from '../models/user';
 const users: User[] = [
   {
     id: 1,
-    username: 'admin@lorax.com',
+    username: 'marcos.baiao@deal.com.br',
     password: 'admin',
-    firstName: 'Sarah',
-    lastName: 'Smith',
+    firstName: 'Marcos',
+    lastName: 'Baião',
     token: 'admin-token'
   }
 ];

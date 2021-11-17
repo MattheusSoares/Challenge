@@ -15,6 +15,7 @@ import { RightSidebarService } from 'src/app/core/service/rightsidebar.service';
 import { WINDOW } from 'src/app/core/service/window.service';
 import { LanguageService } from 'src/app/core/service/language.service';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
+import { EmployeeService } from 'src/app/core/service/employee.service';
 const document: any = window.document;
 
 @Component({
@@ -32,6 +33,7 @@ export class HeaderComponent
   flagvalue;
   countryName;
   langStoreValue: string;
+  employeePhotoUrl: string;
   defaultFlag: string;
   isOpenSidebar: boolean;
   constructor(
@@ -43,7 +45,8 @@ export class HeaderComponent
     private configService: ConfigService,
     private authService: AuthService,
     private router: Router,
-    public languageService: LanguageService
+    public languageService: LanguageService,
+    public employeeService: EmployeeService,
   ) {
     super();
   }
@@ -111,7 +114,7 @@ export class HeaderComponent
   }
   ngOnInit() {
     this.config = this.configService.configData;
-
+    this.getPhotoUrl();
     this.langStoreValue = localStorage.getItem('lang');
     const val = this.listLang.filter((x) => x.lang === this.langStoreValue);
     this.countryName = val.map((element) => element.text);
@@ -171,6 +174,17 @@ export class HeaderComponent
       }
     }
   }
+
+  getPhotoUrl(){
+    console.log("teste")
+    this.employeeService.getById("146f04b5-7754-4de4-b958-5cc6af60aaf8").subscribe({
+      next: employee => {
+        this.employeePhotoUrl = employee.photoUrl;
+      },
+      error: err => console.log(err)
+    })
+  }
+
   callFullscreen() {
     if (
       !document.fullscreenElement &&

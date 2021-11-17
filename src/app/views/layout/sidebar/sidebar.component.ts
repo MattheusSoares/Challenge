@@ -11,6 +11,8 @@ import {
 } from '@angular/core';
 import { ROUTES } from './sidebar-items';
 import { AuthService } from 'src/app/core/service/auth.service';
+import { EmployeeService } from 'src/app/core/service/employee.service';
+import { EmployeeRoleService } from 'src/app/core/service/employee.role.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -25,6 +27,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public innerHeight: any;
   public bodyTag: any;
   listMaxHeight: string;
+  employeePhotoUrl: string;
+  employeeRole: string;
   listMaxWidth: string;
   headerHeight = 60;
   routerObj = null;
@@ -33,6 +37,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     public elementRef: ElementRef,
     private authService: AuthService,
+    private employeeService: EmployeeService,
+    private employeeRoleService: EmployeeRoleService,
     private router: Router
   ) {
     this.routerObj = this.router.events.subscribe((event) => {
@@ -58,6 +64,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.renderer.removeClass(this.document.body, 'overlay-open');
     }
   }
+
+  getPhotoUrl(){
+    console.log("teste")
+    this.employeeService.getById("146f04b5-7754-4de4-b958-5cc6af60aaf8").subscribe({
+      next: employee => {
+        this.employeePhotoUrl = employee.photoUrl;
+        this.employeeRoleService.getAll().subscribe({
+          next: employeeRole =>{
+            employeeRole = employeeRole.filter(e => e.id == employee.employeeRoleId)
+            this.employeeRole = employeeRole[0].description
+          }, error: err => console.log(err)
+          
+        })
+      },
+      error: err => console.log(err)
+    })
+  }
+
   callLevel1Toggle(event: any, element: any) {
     if (element === this.level1Menu) {
       this.level1Menu = '0';
@@ -88,6 +112,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.authService.currentUserValue) {
       this.sidebarItems = ROUTES.filter((sidebarItem) => sidebarItem);
+      this.getPhotoUrl()
     }
 
     this.initLeftSidebar();

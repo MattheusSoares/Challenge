@@ -241,7 +241,8 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
 
             newScoreValuesMapped.push({
                 score: allowedScoresValue,
-                description: scoreHelperValue
+                description: scoreHelperValue.split(';')
+
             });
         });
 

@@ -29,4 +29,8 @@ export class EmployeeService {
     return this.http.get<Employee[]>(`${this.baseUrl}/Employee/employee-role/${employeeRoleId}`);
   }
 
+  getFilteredEmployees(body): Observable<Employee[]> {
+    return this.http.post<Employee[]>(`${this.baseUrl}/Employee/process-search`, body);
+  }
+
 }

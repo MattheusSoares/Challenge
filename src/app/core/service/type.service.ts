@@ -17,7 +17,7 @@ export class TypeService {
     this.baseUrl = baseUrl;
   }
 
-  getAllArray(categoryArray: []): Observable<EmployeeType[]> {
+  getAllArray(categoryArray: any[]): Observable<EmployeeType[]> {
     let params = new HttpParams(); 
     categoryArray.forEach(item =>{
       params = params.append('attributeCategoryIds', item);

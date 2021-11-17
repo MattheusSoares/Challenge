@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -19,6 +19,13 @@ import { EmployeeService } from 'src/app/core/service/employee.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Category } from 'src/app/core/models/category.model';
+import { EmployeeType } from 'src/app/core/models/type.model';
+import { AttributeService } from 'src/app/core/service/attribute.service';
+import { CategoryService } from 'src/app/core/service/category.service';
+import { TypeService } from 'src/app/core/service/type.service';
+import { Attribute } from 'src/app/core/models/attribute.model';
 
 @Component({
   selector: 'app-employee',
@@ -28,31 +35,38 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export class EmployeeComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit
-{
+  implements OnInit {
   filterToggle = false;
   displayedColumns = [
     'select',
-    'id',
+    'pathPhoto',
     'firstName',
     'email',
     'actions'
   ];
-  // exampleDatabase: ContactsService | null;
-  // dataSource: ExampleDataSource | null;
+  employeeForm: FormGroup;
+
   dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<Employee>(true, []);
   id: number;
   disableCheckbox: boolean;
-  //contacts: Contacts | null;
   employees: Employee[] = [];
+
+  categories: Category[] = [];
+  types: EmployeeType[] = [];
+  attributes: Attribute[] = [];
+  
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public contactsService: ContactsService,
     public employeeService: EmployeeService,
     private snackBar: MatSnackBar,
-    private route: Router
+    private route: Router,
+    private formBuilder: FormBuilder,
+    private attributeService: AttributeService,
+    public categoryService: CategoryService,
+    public typeService: TypeService,
   ) {
     super();
   }
@@ -65,7 +79,10 @@ export class EmployeeComponent
 
   ngOnInit() {
     this.loadData();
-    this.disableCheckbox = false; 
+    this.disableCheckbox = false;
+    this.initForm();
+    this.addFilter();
+    this.getCategorias(0);
   }
   refresh() {
     this.loadData();
@@ -73,52 +90,21 @@ export class EmployeeComponent
 
   getEmployers() {
     this.dataSource.data = [];
-
     this.employeeService.getAll().subscribe(colaboradores => {
       this.employees = colaboradores;
       this.dataSource.data = this.employees;
-      // console.log("dataSource.data: ", this.dataSource.data);
-      // console.log("dataSource: ", this.dataSource);
     });
 
   }
 
-  onClickRoute(event){
-    // console.log("event: ", event)
+  onClickRoute(event) {
     this.route.navigate([`/employee/detalhes/` + event.id]);
   }
 
-  addNew() {
-    console.log("selection: ", this.selection.selected)
-    // let tempDirection;
-    // if (localStorage.getItem('isRtl') === 'true') {
-    //   tempDirection = 'rtl';
-    // } else {
-    //   tempDirection = 'ltr';
-    // }
-    // const dialogRef = this.dialog.open(EmployeeFormComponent, {
-    //   data: {
-    //     contacts: this.contacts,
-    //     action: 'add'
-    //   },
-    //   direction: tempDirection
-    // });
-    // this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-    //   if (result === 1) {
-    //     // After dialog is closed we're doing frontend updates
-    //     // For add we're just pushing a new row inside DataServicex
-    //     this.exampleDatabase.dataChange.value.unshift(
-    //       this.contactsService.getDialogData()
-    //     );
-    //     this.refreshTable();
-    //     this.showNotification(
-    //       'snackbar-success',
-    //       'Add Record Successfully...!!!',
-    //       'bottom',
-    //       'center'
-    //     );
-    //   }
-    // });
+  initForm() {
+    this.employeeForm = this.formBuilder.group({
+      filters: this.formBuilder.array([])
+    });
   }
 
   detailsCall(row) {
@@ -153,53 +139,28 @@ export class EmployeeComponent
     return numSelected === numRows;
   }
 
-  countSeleted(){
+  countSeleted() {
     console.log("selection: ", this.selection);
   }
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    // this.isAllSelected()
-    //   ? this.selection.clear() && checkSelectionBool = true
-    //   : this.dataSource.data.forEach((row) =>
-    //       this.selection.select(row)
-    //     );
-    if(this.isAllSelected){
+  
+    if (this.isAllSelected) {
       this.selection.clear();
       this.checkSelectionBool = true
-    } else{
+    } else {
       this.dataSource.data.forEach((row) =>
-            this.selection.select(row));
+        this.selection.select(row));
     }
 
   }
 
   checkSelectionBool: boolean;
-  
-  removeSelectedRows() {
-    // const totalSelect = this.selection.selected.length;
-    // this.selection.selected.forEach((item) => {
-    //   const index: number = this.dataSource.data.findIndex(
-    //     (d) => d === item
-    //   );
-    //   // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
-    //   this.exampleDatabase.dataChange.value.splice(index, 1);
-    //   this.refreshTable();
-    //   this.selection = new SelectionModel<Employee>(true, []);
-    // });
-    // this.showNotification(
-    //   'snackbar-danger',
-    //   totalSelect + ' Record Delete Successfully...!!!',
-    //   'bottom',
-    //   'center'
-    // );
-  }
+
   public loadData() {
     this.getEmployers();
 
-    // console.log("datasource: ", this.dataSource);
     this.subs.sink = fromEvent(this.filter.nativeElement, 'keyup')
-      // .debounceTime(150)
-      // .distinctUntilChanged()
       .subscribe(() => {
         if (!this.dataSource) {
           return;
@@ -216,27 +177,104 @@ export class EmployeeComponent
     });
   }
 
-  checkSelection(){
-    if(this.selection.selected.length >= 2)
-      this.disableCheckbox = true; 
+  checkSelection() {
+    if (this.selection.selected.length >= 2)
+      this.disableCheckbox = true;
     else
-      this.disableCheckbox = false; 
+      this.disableCheckbox = false;
   }
 
   onClickSearch() {
-    debugger
     let id = this.selection.selected[0].id;
     let id2 = this.selection.selected[1].id;
     this.route.navigate([`/employee/comparacao/` + id + '/' + id2]);
   }
 
-  isValidSelect() : boolean{
-    
-    if(this.selection.selected.length >= 2 ){
+  isValidSelect(): boolean {
+
+    if (this.selection.selected.length >= 2) {
       return true
     } else {
       return false
     }
+  }
+
+  get filtersArray(): FormArray {
+    return this.employeeForm.get('filters') as FormArray;
+  }
+
+  addFilter() {
+    const formArray = this.employeeForm.get('filters') as FormArray;
+    formArray.push(new FormGroup({
+      category: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      attribute: new FormControl('', Validators.required),
+      employeeSearchComparison: new FormControl('', Validators.required),
+      value: new FormControl('', Validators.required),
+      typesArray: new FormControl(''),
+      attributesArray: new FormControl('')
+    }));
+  }
+
+  deleteFilter(_, index) {
+    const formArray = this.employeeForm.get('filters') as FormArray;
+    formArray.removeAt(index);
+  }
+
+  getAttributes(i, id) {
+    this.attributeService.getAllArray([id]).subscribe(att => {
+      this.attributes = att;
+      const array = this.employeeForm.get('filters') as FormArray
+      array.controls[i].get("attributesArray").setValue(this.attributes);
+      console.log(array.controls[i].get("attributesArray").value);
+    });
+  }
+
+  getCategorias(i) {
+    this.filtersArray.controls[i].get("typesArray").setValue(null);
+    this.filtersArray.controls[i].get("attributesArray").setValue(null);
+    this.categoryService.getAll().subscribe(cat => {
+      this.categories = cat;
+    });
+  }
+
+  getTypes(i, id) {
+    this.filtersArray.controls[i].get("attributesArray").setValue(null);
+    this.typeService.getAllArray([id]).subscribe(types => {
+      this.types = types;
+      const array = this.employeeForm.get('filters') as FormArray
+      array.controls[i].get("typesArray").setValue(this.types);
+      console.log(array.controls[i].get("typesArray").value);
+    });
+  }
+  
+  onClickSearchType(i) {
+    const array = this.employeeForm.get("filters") as FormArray
+    console.log(array.controls[i].get('category').value)
+    this.getTypes(i, array.controls[i].get('category').value);
+  }
+
+  onClickSearchAttribute(i) {
+    const array = this.employeeForm.get("filters") as FormArray
+    console.log(array.controls[i].get('type').value)
+    this.getAttributes(i, array.controls[i].get('type').value);
+  }
+
+  onClickSearchFilter() {
+
+    const response = {
+      searchItems: this.filtersArray.value.map(o => ({
+        value: o.value,
+        attributeId: o.attribute,
+        employeeSearchComparison: o.employeeSearchComparison
+      }))
+    };
+
+    console.log(response)
+    this.employeeService.getFilteredEmployees(response).subscribe(employees => {
+      this.employees = employees
+      this.dataSource.data = this.employees;
+    });
   }
 }
 

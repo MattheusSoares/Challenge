@@ -35,20 +35,7 @@ export class EmployeeFormComponent {
     console.log("employees: ", this.employees)
     console.log("action", this.action);
     console.log("data.action", this.data.action);
-    // if (this.action === 'edit') {
-    //   this.isDetails = false;
-    //   this.dialogTitle = data.contacts.name;
-    //   this.contacts = data.contacts;
-    //   this.contactsForm = this.createContactForm();
-    // } else if (this.action === 'details') {
-    //   this.contacts = data.contacts;
-    //   this.isDetails = true;
-    // } else {
-    //   this.isDetails = false;
-    //   this.dialogTitle = 'New Contacts';
-    //   this.contacts = new Contacts({});
-    //   this.contactsForm = this.createContactForm();
-    // }
+
   }
   // formControl = new FormControl('', [
   //   Validators.required

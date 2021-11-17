@@ -13,6 +13,11 @@
     padding: 10px;
 }
 
+.filtro-atributo-detalhes-employee{
+    padding: 20px;
+//    margin-bottom: -30px;
+}
+
 .dados-apresentacao{
     margin-bottom: 1rem;
     text-align: left;
@@ -49,4 +54,10 @@
 
 .mat-dialog-actions {
     justify-content: flex-end;
+}
+
+.titulo-graficos{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }

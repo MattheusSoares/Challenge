@@ -1,4 +1,4 @@
-import { ProcessAttribute } from "./process-attribute.model";
+import { ProcessAttribute } from "./process-attributes.model";
 
 export class ProcessEmployeeAttribute {
     employeeId: string;

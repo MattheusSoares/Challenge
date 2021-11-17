@@ -32,52 +32,6 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
 
     private readonly notifier: NotifierService;
 
-    /* Pie Chart */
-    pieChart: EChartOption = {
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-            data: ['Data 1', 'Data 2', 'Data 3', 'Data 4', 'Data 5'],
-            textStyle: {
-                color: '#9aa0ac',
-                padding: [0, 5, 0, 5]
-            }
-        },
-
-        series: [
-            {
-                name: 'Chart Data',
-                type: 'pie',
-                radius: '55%',
-                center: ['50%', '48%'],
-                data: [
-                    {
-                        value: 335,
-                        name: 'Data 1'
-                    },
-                    {
-                        value: 310,
-                        name: 'Data 2'
-                    },
-                    {
-                        value: 234,
-                        name: 'Data 3'
-                    },
-                    {
-                        value: 135,
-                        name: 'Data 4'
-                    },
-                    {
-                        value: 548,
-                        name: 'Data 5'
-                    }
-                ]
-            }
-        ],
-        color: ['#575B7A', '#DE725C', '#DFC126', '#72BE81', '#50A5D8']
-    };
     constructor(
         public httpClient: HttpClient,
         public dialog: MatDialog,
@@ -95,6 +49,8 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.notifier = notifierService;
     }
     employeelId: string;
+
+    attributeSelected: string;
 
     newScoreForm: FormGroup;
     controlNewScoreCategories: FormControl;
@@ -122,10 +78,18 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     listaEmployeeAttribute: EmployeeAttribute[];
     attributes: Attribute[];
     listaEmployeeAttributeDiff: string[] = [];
+    listaEmployeeAttributeChart: any[] = [];
 
     tableContent: any[] = [];
+    chartContent: any[] = [];
+
+    chartLine: EChartOption;
+    chartGaugeAll: EChartOption;
+    chartGaugeLast5: EChartOption;
+    chartGaugeLast10: EChartOption;
 
     attributeCategories = new FormControl();
+    attributeCategoriesCharts = new FormControl();
     // attributeCategoryList: any[] = [];
 
     // attributeTypes = new FormControl();
@@ -135,12 +99,15 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     filtersCategories: any[] = [];
 
     tb2columns = [
-        { prop: 'attributeName', name: 'Attibute' },
-        { prop: 'score', name: 'Score' },
-        { prop: 'createdAt', name: 'Evaluation Date' }
+        { prop: 'attributeName', name: 'Attibute', width: 150 },
+        { prop: 'score', name: 'Score', width: 50 },
+        { prop: 'dateDisplay', name: 'Evaluation Date', width: 100 }
     ];
     tb2data = [];
     tb2filteredData = [];
+
+    chartData = [];
+    chartDataFiltered = [];
 
     ngOnInit() {
         this.controlNewScoreCategories = new FormControl();
@@ -149,17 +116,9 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.controlNewScoreValue = new FormControl();
 
         this.employeelId = this.route.snapshot.paramMap.get('id');
-
-        this.tb2fetch((data) => {
-            this.tb2data = data;
-            this.tb2filteredData = data;
-        });
         this.getEmployeeRoles(this.employeelId);
 
-
         this.getEmployeeAttribute(this.employeelId);
-        // this.getattributeTypeList();
-        // this.getattributeCategoryList();
     }
 
     getEmployeeData(id: string) {
@@ -196,6 +155,40 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         });
     }
 
+    filterSelectChart(event) {
+        this.attributeSelected = event.value;
+
+        this.employeeAttributeService.getByEmployeeProcessAttributes({
+            employeeId: this.employeelId,
+            attributeIds: [
+                event.value.attributeId
+            ]
+        }).subscribe(result => {
+
+            this.chartLine = this.populateLineChart(result.processedEmployeeAttributes[0].rawData);
+
+            this.chartGaugeAll = this.populateGaugeChart(
+                Math.round(result.processedEmployeeAttributes[0].averageScore * 100) / 100
+            );
+            this.chartGaugeLast5 = this.populateGaugeChart(
+                Math.round(result.processedEmployeeAttributes[0].averageScoreLast5 * 100) / 100
+            );
+            this.chartGaugeLast10 = this.populateGaugeChart(
+                Math.round(result.processedEmployeeAttributes[0].averageScoreLast10 * 100) / 100
+            );
+        });
+        // const chartDataFilteredSelected = [];
+
+        // this.chartData.forEach(element => {
+        //     if (element.attributeName === this.attributeSelected) {
+        //         chartDataFilteredSelected.push(element);
+        //     }
+        // });
+
+        // this.chartDataFiltered = chartDataFilteredSelected;
+        // this.chart1 = this.populateChart(this.chartDataFiltered);
+    }
+
     filterSelect(event) {
         if (event.value.length > 0) {
             const tableContentFiltered = [];
@@ -205,7 +198,6 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                     tableContentFiltered.push(element);
                 }
             });
-
             this.tb2data = tableContentFiltered;
         }
         else {
@@ -286,35 +278,12 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         }
     }
 
-    // getattributeTypeList() {
-    //     this.attributeTypeService.getAll().subscribe(
-    //         response => {
-    //             this.attributeTypeList = response;
-    //             // console.log(response);
-    //         },
-    //         error => {
-    //             console.log(error);
-    //         }
-    //     );
-    // }
-
-    // getattributeCategoryList() {
-    //     this.attributeCategoryService.getAll().subscribe(
-    //         response => {
-    //             this.attributeCategoryList = response;
-    //             // console.log(response);
-    //         },
-    //         error => {
-    //             console.log(error);
-    //         }
-    //     );
-    // }
-
     getAllAttributes() {
         this.attributeService.getAll().subscribe(
             response => {
                 this.attributes = response;
                 this.populateTb2();
+                this.populateChartData();
             },
             error => {
                 console.log(error);
@@ -322,6 +291,33 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         );
     }
 
+    populateChartData() {
+        this.chartContent = [];
+        const listaEmployeeAttributeChartAlt = [];
+
+        this.listaEmployeeAttribute.forEach(element => {
+            this.attributes.forEach(attribute => {
+                if (attribute.id === element.attributeId) {
+                    listaEmployeeAttributeChartAlt.push({
+                        attributeId: element.attributeId,
+                        attributeName: attribute.description,
+                        createdAt: element.createdAt,
+                        dateDisplay: this.formatDate(element.createdAt),
+                        employeeId: element.employeeId,
+                        id: element.id,
+                    });
+                }
+            });
+        });
+
+        this.listaEmployeeAttributeChart = listaEmployeeAttributeChartAlt.filter((e, i) => {
+            return listaEmployeeAttributeChartAlt.findIndex((x) => {
+                return x.attributeName === e.attributeName && x.attributeId === e.attributeId;
+            }) === i;
+        });
+
+        this.chartData = this.chartContent;
+    }
 
     refresh() {
     }
@@ -338,6 +334,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                         attributeId: element.attributeId,
                         attributeName: attribute.description,
                         createdAt: element.createdAt,
+                        dateDisplay: this.formatDate(element.createdAt),
                         employeeId: element.employeeId,
                         id: element.id,
                         score: element.score
@@ -353,40 +350,112 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.tb2data = this.tableContent;
     }
 
-    tb2fetch(cb) {
-        const req = new XMLHttpRequest();
-        req.open('GET', 'assets/data/ngx-data.json');
-        req.onload = () => {
-            const data = JSON.parse(req.response);
-            cb(data);
-        };
-        req.send();
+    formatDate(value) {
+        const date = new Date(value);
+        const day = date.toLocaleString('default', { day: '2-digit' });
+        const month = date.toLocaleString('default', { month: 'long' });
+        const year = date.toLocaleString('default', { year: 'numeric' });
+        return day + ' de ' + (month.charAt(0).toUpperCase() + month.slice(1)) + ' de ' + year;
     }
 
-    tb2filterDatatable(event) {
-        // get the value of the key pressed and make it lowercase
-        const val = event.target.value.toLowerCase();
-        // get the amount of columns in the table
-        const colsAmt = this.tb2columns.length;
-        // get the key names of each column in the dataset
-        const keys = Object.keys(this.tb2filteredData[0]);
-        // assign filtered matches to the active datatable
-        // this.tb2data = this.tb2filteredData.filter(function (item) {
-        //     // iterate through each row's column data
-        //     for (let i = 0; i < colsAmt; i++) {
-        //         // check for a match
-        //         if (
-        //             item[keys[i]].toString().toLowerCase().indexOf(val) !== -1 ||
-        //             !val
-        //         ) {
-        //             // found match, return true to add to result set
-        //             return true;
-        //         }
-        //     }
-        // });
 
-        // whenever the filter changes, always go back to the first page
-        this.table2.offset = 0;
+    populateLineChart(chartData): EChartOption {
+        const chartOptions: EChartOption = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: chartData.map(x => {
+                    return new Date(x.createAt).toLocaleDateString('pt-BR', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+                })
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: chartData.map(x => {
+                        return x.score;
+                    }),
+                    type: 'line',
+                    smooth: true
+                }
+            ]
+        };
+
+        return chartOptions;
+    }
+
+
+    populateGaugeChart(chartData): EChartOption {
+        const chartOptions: EChartOption = {
+            series: [
+                {
+                    type: 'gauge',
+                    startAngle: 180,
+                    endAngle: 0,
+                    min: 0,
+                    max: 10,
+                    splitNumber: 8,
+                    axisLine: {
+                        lineStyle: {
+                            width: 6,
+                            color: [
+                                [0.25, '#FF6E76'],
+                                [0.5, '#FDDD60'],
+                                [0.75, '#58D9F9'],
+                                [1, '#7CFFB2']
+                            ]
+                        }
+                    },
+                    pointer: {
+                        length: '70%',
+                        width: 5,
+                        itemStyle: {
+                            color: 'auto'
+                        }
+                    },
+                    axisTick: {
+                        length: 12,
+                        lineStyle: {
+                            color: 'auto',
+                            width: 2
+                        }
+                    },
+                    splitLine: {
+                        length: 20,
+                        lineStyle: {
+                            color: 'auto',
+                            width: 5
+                        }
+                    },
+                    axisLabel: {
+                        color: '#464646',
+                        fontSize: 20,
+                        distance: -60,
+                        formatter: () => {
+                            return '';
+                        }
+                    },
+                    detail: {
+                        fontSize: 50,
+                        offsetCenter: [0, '40%'],
+                        valueAnimation: true,
+                        color: 'auto'
+                    },
+                    data: [
+                        {
+                            value: chartData,
+                        }
+                    ]
+                }
+            ]
+        };
+
+        return chartOptions;
     }
 
 }

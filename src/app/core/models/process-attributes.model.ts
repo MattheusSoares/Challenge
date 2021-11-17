@@ -1,3 +1,5 @@
+import { RawData } from "./process-attribute-rawData.model";
+
 export class ProcessAttribute {
     attributeId: string;
     averageScore: number;
@@ -6,4 +8,5 @@ export class ProcessAttribute {
     standardDeviation: number;
     assignedAttributesCount: number;
     id: string;
+    rawData: RawData[];
 }

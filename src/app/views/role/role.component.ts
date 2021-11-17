@@ -16,7 +16,7 @@ import { RolesService } from 'src/app/core/service/roles.service';
 import { TypeService } from 'src/app/core/service/type.service';
 import { AttributeService } from 'src/app/core/service/attribute.service';
 import { Attribute } from 'src/app/core/models/attribute.model';
-import { EmployeeAttributeService } from 'src/app/core/service/employee-attribute.service';
+import { EmployeeAttributeService } from 'src/app/core/service/employee.attribute.service';
 import { ProcessAttribute } from 'src/app/core/models/process-attributes.model';
 import { ProcessRoleAttribute } from 'src/app/core/models/process-role-attributes';
 

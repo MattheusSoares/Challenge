@@ -70,11 +70,15 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     listaEmployeeAttribute: EmployeeAttribute[];
     attributes: Attribute[];
     listaEmployeeAttributeDiff: string[] = [];
+    listaEmployeeAttributeChart: any[] = [];
 
     tableContent: any[] = [];
     chartContent: any[] = [];
 
-    chart1: EChartOption;
+    chartLine: EChartOption;
+    chartGaugeAll: EChartOption;
+    chartGaugeLast5: EChartOption;
+    chartGaugeLast10: EChartOption;
 
     attributeCategories = new FormControl();
     attributeCategoriesCharts = new FormControl();
@@ -145,16 +149,36 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
 
     filterSelectChart(event) {
         this.attributeSelected = event.value;
-        const chartDataFilteredSelected = [];
 
-        this.chartData.forEach(element => {
-            if (element.attributeName === this.attributeSelected) {
-                chartDataFilteredSelected.push(element);
-            }
+        this.employeeAttributeService.getByEmployeeProcessAttributes({
+            employeeId: this.employeelId,
+            attributeIds: [
+                event.value.attributeId
+            ]
+        }).subscribe(result => {
+
+            this.chartLine = this.populateLineChart(result.processedEmployeeAttributes[0].rawData);
+
+            this.chartGaugeAll = this.populateGaugeChart(
+                Math.round(result.processedEmployeeAttributes[0].averageScore * 100) / 100
+            );
+            this.chartGaugeLast5 = this.populateGaugeChart(
+                Math.round(result.processedEmployeeAttributes[0].averageScoreLast5 * 100) / 100
+            );
+            this.chartGaugeLast10 = this.populateGaugeChart(
+                Math.round(result.processedEmployeeAttributes[0].averageScoreLast10 * 100) / 100
+            );
         });
+        // const chartDataFilteredSelected = [];
 
-        this.chartDataFiltered = chartDataFilteredSelected;
-        this.chart1 = this.populateChart(this.chartDataFiltered);
+        // this.chartData.forEach(element => {
+        //     if (element.attributeName === this.attributeSelected) {
+        //         chartDataFilteredSelected.push(element);
+        //     }
+        // });
+
+        // this.chartDataFiltered = chartDataFilteredSelected;
+        // this.chart1 = this.populateChart(this.chartDataFiltered);
     }
 
     filterSelect(event) {
@@ -261,27 +285,27 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
 
     populateChartData() {
         this.chartContent = [];
-        this.listaEmployeeAttributeDiff = [];
+        const listaEmployeeAttributeChartAlt = [];
 
         this.listaEmployeeAttribute.forEach(element => {
             this.attributes.forEach(attribute => {
                 if (attribute.id === element.attributeId) {
-                    this.listaEmployeeAttributeDiff.push(attribute.description);
-                    this.chartContent.push({
+                    listaEmployeeAttributeChartAlt.push({
                         attributeId: element.attributeId,
                         attributeName: attribute.description,
                         createdAt: element.createdAt,
                         dateDisplay: this.formatDate(element.createdAt),
                         employeeId: element.employeeId,
                         id: element.id,
-                        score: element.score
                     });
                 }
             });
         });
 
-        this.listaEmployeeAttributeDiff = this.listaEmployeeAttributeDiff.filter((item, pos) => {
-            return this.listaEmployeeAttributeDiff.indexOf(item) === pos;
+        this.listaEmployeeAttributeChart = listaEmployeeAttributeChartAlt.filter((e, i) => {
+            return listaEmployeeAttributeChartAlt.findIndex((x) => {
+                return x.attributeName === e.attributeName && x.attributeId === e.attributeId;
+            }) === i;
         });
 
         this.chartData = this.chartContent;
@@ -327,30 +351,103 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     }
 
 
-    populateChart(chartData): EChartOption {
+    populateLineChart(chartData): EChartOption {
         const chartOptions: EChartOption = {
             tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    // Use axis to trigger tooltip
-                    type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                }
+                trigger: 'axis'
             },
             xAxis: {
                 type: 'category',
-                data: chartData.map(x => x.dateDisplay)
+                data: chartData.map(x => {
+                    return new Date(x.createAt).toLocaleDateString('pt-BR', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+                })
             },
             yAxis: {
                 type: 'value'
             },
             series: [
                 {
-                    data: chartData.map(x => x.score),
-                    type: 'bar'
+                    data: chartData.map(x => {
+                        return x.score;
+                    }),
+                    type: 'line',
+                    smooth: true
                 }
             ]
         };
 
         return chartOptions;
     }
+
+
+    populateGaugeChart(chartData): EChartOption {
+        const chartOptions: EChartOption = {
+            series: [
+                {
+                    type: 'gauge',
+                    startAngle: 180,
+                    endAngle: 0,
+                    min: 0,
+                    max: 10,
+                    splitNumber: 8,
+                    axisLine: {
+                        lineStyle: {
+                            width: 6,
+                            color: [
+                                [0.25, '#FF6E76'],
+                                [0.5, '#FDDD60'],
+                                [0.75, '#58D9F9'],
+                                [1, '#7CFFB2']
+                            ]
+                        }
+                    },
+                    pointer: {
+                        length: '70%',
+                        width: 5,
+                        itemStyle: {
+                            color: 'auto'
+                        }
+                    },
+                    axisTick: {
+                        length: 12,
+                        lineStyle: {
+                            color: 'auto',
+                            width: 2
+                        }
+                    },
+                    splitLine: {
+                        length: 20,
+                        lineStyle: {
+                            color: 'auto',
+                            width: 5
+                        }
+                    },
+                    axisLabel: {
+                        color: '#464646',
+                        fontSize: 20,
+                        distance: -60,
+                        formatter: () => {
+                            return '';
+                        }
+                    },
+                    detail: {
+                        fontSize: 50,
+                        offsetCenter: [0, '40%'],
+                        valueAnimation: true,
+                        color: 'auto'
+                    },
+                    data: [
+                        {
+                            value: chartData,
+                        }
+                    ]
+                }
+            ]
+        };
+
+        return chartOptions;
+    }
+
 }

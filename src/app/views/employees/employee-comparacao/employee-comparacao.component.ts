@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ProcessEmployeeAttribute } from 'src/app/core/models/process-employee-attribubtes.model';
 import { Employee } from 'src/app/core/models/employee.model';
 import { EmployeeService } from 'src/app/core/service/employee.service';
-import { EmployeeAttributeService } from 'src/app/core/service/employee-attribute.service';
+import { EmployeeAttributeService } from 'src/app/core/service/employee.attribute.service';
 import { AttributeService } from 'src/app/core/service/attribute.service';
 import { Attribute } from 'src/app/core/models/attribute.model';
 

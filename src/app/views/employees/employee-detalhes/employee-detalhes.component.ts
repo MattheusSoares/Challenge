@@ -177,16 +177,6 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                 Math.round(result.processedEmployeeAttributes[0].averageScoreLast10 * 100) / 100
             );
         });
-        // const chartDataFilteredSelected = [];
-
-        // this.chartData.forEach(element => {
-        //     if (element.attributeName === this.attributeSelected) {
-        //         chartDataFilteredSelected.push(element);
-        //     }
-        // });
-
-        // this.chartDataFiltered = chartDataFilteredSelected;
-        // this.chart1 = this.populateChart(this.chartDataFiltered);
     }
 
     filterSelect(event) {
@@ -346,7 +336,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
         this.listaEmployeeAttributeDiff = this.listaEmployeeAttributeDiff.filter((item, pos) => {
             return this.listaEmployeeAttributeDiff.indexOf(item) === pos;
         });
-
+        this.attributeCategories.setValue(this.listaEmployeeAttributeDiff);
         this.tb2data = this.tableContent;
     }
 

@@ -66,7 +66,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   getPhotoUrl(){
-    console.log("teste")
     this.employeeService.getById("146f04b5-7754-4de4-b958-5cc6af60aaf8").subscribe({
       next: employee => {
         this.employeePhotoUrl = employee.photoUrl;

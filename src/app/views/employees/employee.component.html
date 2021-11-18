@@ -166,7 +166,7 @@
                      
                       <div style="margin-left: 4%;"
                       class="col-lg-1 col-md-1 col-sm-4 col-xs-4">
-                        <button style="width: 120%; margin-top: 1%; float: right; margin-right: 1% ;"
+                        <button style="width: 120px; margin-top: 1%; float: right; margin-right: 1% ;"
                                 mat-raised-button
                                 (click)="onClickSearchFilter()"
                                 [disabled]="!filtersArray.valid"
@@ -238,7 +238,8 @@
                                         [checked]="selection.hasValue() && isAllSelected()"
                                         [indeterminate]="selection.hasValue() && !isAllSelected()"
                                         [ngClass]="'tbl-checkbox'"
-                                        [disabled]="!isValidSelect()">
+                                        [disabled]="!isValidSelect()"
+                                        color="primary">
                           </mat-checkbox>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row"

@@ -5,14 +5,14 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <ul class="breadcrumb breadcrumb-style ">
                         <li class="breadcrumb-item">
-                            <h4 class="page-title">Roles</h4>
+                            <h4 class="page-title">Cargos</h4>
                         </li>
                         <li class="breadcrumb-item bcrumb-1">
                             <a routerLink="/admin/dashboard/main">
                                 <i class="fas fa-home"></i> Home</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Roles</li>
+                        <li class="breadcrumb-item active">Cargos</li>
                     </ul>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                     <div class="card">
                         <div class="header">
-                            <h2>Roles</h2>
+                            <h2>Cargos</h2>
                         </div>
                         <div class="body">
                             <form class="register-form m-4">
@@ -32,7 +32,7 @@
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                                         <mat-form-field class="example-full-width"
                                                         appearance="fill">
-                                            <mat-label>Roles</mat-label>
+                                            <mat-label>Cargos</mat-label>
                                             <mat-select [formControl]="roleForm">
                                                 <mat-option *ngFor="let role of roles"
                                                             [value]="role">

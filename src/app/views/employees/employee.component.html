@@ -151,7 +151,7 @@
                                       type="button"
                                       class="btn-delete margin-button"
                                       (click)="deleteFilter(filter, i)"
-                                      style="float: right; margin-top: 10px !important">
+                                      style="float: right; margin-top: 10px !important;">
                                 <mat-icon aria-label="Delete"
                                           class="col-white">close</mat-icon>
                               </button>
@@ -160,9 +160,21 @@
                           </div>
                         </div>
                       </div>
-                      <div class="m-4 rtl">
+                    </div>
+                    <div class=row>
+                      <div class="col-lg-10 col-md-10 col-sm-4 col-xs-4"> </div>
+                     
+                      <div style="margin-left: 4%;"
+                      class="col-lg-1 col-md-1 col-sm-4 col-xs-4">
+                        <button style="width: 120%; margin-top: 1%; float: right; margin-right: 1% ;"
+                                mat-raised-button
+                                (click)="onClickSearchFilter()"
+                                [disabled]="!filtersArray.valid"
+                                color="primary">Buscar<mat-icon>search</mat-icon></button>
+                      </div>
+                      <div style="max-width: 4%; padding-right: 0px;" class="col-lg-1 col-md-1 col-sm-4 col-xs-4">
                         <button mat-mini-fab
-                                style="float: right"
+                                style="float: right;"
                                 color="primary"
                                 mat-raised-button
                                 (click)="addFilter()"
@@ -170,19 +182,17 @@
                           <mat-icon class="col-white">add</mat-icon>
                         </button>
                       </div>
-                    </div>
-                    <div>
-                      <button style="width: 10%; margin-top: 2%; float: right; margin-right: 1% ;"
-                              mat-raised-button
-                              (click)="onClickSearchFilter()"
-                              [disabled]="!filtersArray.valid"
-                              color="primary">Buscar<mat-icon>search</mat-icon></button>
+
+
+
+
                     </div>
                   </div>
                 </div>
                 <div class="body">
                   <div class="table-responsive">
-                    <div style="background-color: white" class="materialTableHeader">
+                    <div style="background-color: rgba(255, 255, 255, 0.979)"
+                         class="materialTableHeader">
                       <div class="row">
                         <div class="col-8">
                           <ul class="header-buttons-left ml-0">

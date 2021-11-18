@@ -63,14 +63,6 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     newScoreAttributes: any[];
     newScoreValues: any[];
 
-    scoreLegend: any[] = [
-        "1-Basic",
-        "3-Basic/Medium",
-        "5-Medium",
-        "7-Medium/Advanced",
-        "10-Advanced"
-    ]
-
     employeeDisplay: any = {};
     employee: Employee = new Employee();
     employeeRoles: EmployeeRole[];
@@ -90,10 +82,6 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
 
     attributeCategories = new FormControl();
     attributeCategoriesCharts = new FormControl();
-    // attributeCategoryList: any[] = [];
-
-    // attributeTypes = new FormControl();
-    // attributeTypeList: any[] = [];
 
     filtersTypes: any[] = [];
     filtersCategories: any[] = [];
@@ -266,6 +254,8 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                 });
 
             this.dialog.closeAll();
+            this.getEmployeeRoles(this.employeelId);
+
         }
     }
 

@@ -96,14 +96,14 @@ export const ROUTES: RouteInfo[] = [
     path: 'employee',
     title: 'Colaboradores',
     moduleName: 'employee',
-    icon: 'far fa-address-card',
+    icon: 'fas fa-user-friends',
     class: '',
     groupTitle: false,
     submenu: []
   },
   {
     path: 'role',
-    title: 'Roles',
+    title: 'Cargos',
     moduleName: 'role',
     icon: 'far fa-address-card',
     class: '',

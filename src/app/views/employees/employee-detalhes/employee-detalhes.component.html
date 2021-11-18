@@ -61,10 +61,10 @@
                               <div class="card conteudo-detalhes-employee">
                                 <div class="row">
                                   <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                    <div class="card filtro-atributo-detalhes-employee">
+                                    <div class="card filtro-atributo-detalhes-employee-tabela">
 
                                       <mat-form-field>
-                                        <mat-label>Attributes</mat-label>
+                                        <mat-label>Atributos</mat-label>
                                         <mat-select [formControl]="attributeCategories"
                                                     (selectionChange)="filterSelect($event)"
                                                     multiple>
@@ -105,6 +105,7 @@
                                                      [headerHeight]="50"
                                                      [footerHeight]="50"
                                                      [rowHeight]="'auto'"
+                                                     [messages]="{emptyMessage: 'Não existem pontuações atribuídas'}"
                                                      [limit]="10">
                                       </ngx-datatable>
 
@@ -122,9 +123,9 @@
 
                                   <div class="row">
                                     <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                      <div class="card filtro-atributo-detalhes-employee">
+                                      <div class="card filtro-atributo-detalhes-employee-grafico">
                                         <mat-form-field>
-                                          <mat-label>Attributes</mat-label>
+                                          <mat-label>Atributos</mat-label>
                                           <mat-select [formControl]="attributeCategoriesCharts"
                                                       (selectionChange)="filterSelectChart($event)">
                                             <mat-option *ngFor="let attribute of listaEmployeeAttributeChart"
@@ -143,38 +144,36 @@
                                   </div>
 
                                   <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Histórico de Scores</h4>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Histórico de Pontuações</h4>
                                       <div echarts
                                            *ngIf="attributeSelected != null"
                                            [options]="chartLine"
-                                           class="echart-height"></div>
+                                           class="echart-height echart-height-line"></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                       <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média Total</h4>
                                       <div echarts
                                            *ngIf="attributeSelected != null"
                                            [options]="chartGaugeAll"
-                                           class="echart-height"></div>
+                                           class="echart-height echart-height-gauge"></div>
 
                                     </div>
-                                  </div>
 
 
-                                  <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 5</h4>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 5 Registros</h4>
                                       <div echarts
                                            *ngIf="attributeSelected != null"
                                            [options]="chartGaugeLast5"
-                                           class="echart-height"></div>
+                                           class="echart-height echart-height-gauge"></div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 10</h4>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 10 Registros</h4>
                                       <div echarts
                                            *ngIf="attributeSelected != null"
                                            [options]="chartGaugeLast10"
-                                           class="echart-height"></div>
+                                           class="echart-height echart-height-gauge"></div>
                                     </div>
                                   </div>
 
@@ -203,7 +202,7 @@
 
 <ng-template #modalNewScore>
   <div mat-dialog-title>
-    <h5>New Score</h5>
+    <h5>Nova Pontuação</h5>
   </div>
 
   <div mat-dialog-content>
@@ -217,7 +216,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <mat-form-field appearance="fill"
                           class="width-filter">
-            <mat-label>Categories</mat-label>
+            <mat-label>Categorias</mat-label>
             <mat-select formControlName="controlNewScoreCategories"
                         (selectionChange)="filterSelectedCategoryNewScore($event)"
                         required>
@@ -236,7 +235,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <mat-form-field appearance="fill"
                           class="width-filter">
-            <mat-label>Types</mat-label>
+            <mat-label>Tipos</mat-label>
             <mat-select formControlName="controlNewScoreTypes"
                         (selectionChange)="filterSelectedTypeNewScore($event)"
                         required>
@@ -254,7 +253,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <mat-form-field appearance="fill"
                           class="width-filter">
-            <mat-label>Attributes</mat-label>
+            <mat-label>Atributos</mat-label>
             <mat-select formControlName="controlNewScoreAttributes"
                         (selectionChange)="filterSelectedAttributeNewScore($event)"
                         required>
@@ -271,7 +270,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <mat-form-field appearance="fill"
                           class="width-filter">
-            <mat-label>Score</mat-label>
+            <mat-label>Pontuação</mat-label>
             <mat-select formControlName="controlNewScoreValue"
                         required>
               <mat-option *ngFor="let value of newScoreValues"
@@ -282,27 +281,10 @@
           </mat-form-field>
         </div>
         <div *ngFor="let value of newScoreValues">
-          {{ value.description}}
+          {{ value.description }}
         </div>
       </div>
 
-      <!-- <div class="form-group">
-        <div class="col-md-12">
-          <mat-form-field appearance="fill"
-                          class="width-filter">
-            <mat-label>Score</mat-label>
-            <input type="number"
-                   matInput
-                   min="1"
-                   max="10"
-                   name="score"
-                   id="score"
-                   formControlName="newScoreValue"
-                   required>
-          </mat-form-field>
-        </div>
-      </div>
- -->
     </form>
   </div>
 
@@ -310,14 +292,14 @@
        class="position-actions">
     <button mat-raised-button
             class="mat-button-cancel"
-            [mat-dialog-close]="false">Cancel</button>
+            [mat-dialog-close]="false">Cancelar</button>
 
     <button mat-raised-button
             class="mat-success"
             color="primary"
             type="submit"
             form="newScoreForm"
-            cdkFocusInitial>Save</button>
+            cdkFocusInitial>Salvar</button>
   </div>
 
 </ng-template>

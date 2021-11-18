@@ -87,9 +87,9 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     filtersCategories: any[] = [];
 
     tb2columns = [
-        { prop: 'attributeName', name: 'Attibute', width: 150 },
-        { prop: 'score', name: 'Score', width: 50 },
-        { prop: 'dateDisplay', name: 'Evaluation Date', width: 100 }
+        { prop: 'attributeName', name: 'Atributo', width: 150 },
+        { prop: 'score', name: 'Pontuação', width: 50 },
+        { prop: 'dateDisplay', name: 'Data de Avaliação', width: 100 }
     ];
     tb2data = [];
     tb2filteredData = [];
@@ -221,6 +221,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     filterSelectedAttributeNewScore(event) {
         const scoreHelper = event.value.scoreHelper.split(";");
         const allowedScores = event.value.allowedScores.split(";");
+        this.newScoreValues = [];
 
         const newScoreValuesMapped = [];
 
@@ -246,11 +247,12 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
             };
 
             this.employeeAttributeService.postSaveEmployeeAttribute(payload).subscribe(response => {
-                this.notifier.notify('success', 'Score successfully saved!');
-                this.populateTb2();
+                this.notifier.notify('success', 'Pontuação salva com sucesso!');
+                this.getEmployeeAttribute(this.employeelId);
+                this.newScoreValues = [];
             },
                 (err) => {
-                    this.notifier.notify('error', `There was an error while saving the new score.`);
+                    this.notifier.notify('error', `Ocorreu um erro ao salvar a nova pontuação.`);
                 });
 
             this.dialog.closeAll();
@@ -304,6 +306,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     }
 
     populateTb2() {
+        console.log('k');
         this.tableContent = [];
         this.listaEmployeeAttributeDiff = [];
 
@@ -423,7 +426,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                     },
                     detail: {
                         fontSize: 50,
-                        offsetCenter: [0, '40%'],
+                        offsetCenter: [0, '60%'],
                         valueAnimation: true,
                         color: 'auto'
                     },

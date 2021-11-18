@@ -2,10 +2,14 @@
 <app-sidebar></app-sidebar>
 <app-right-sidebar></app-right-sidebar>
 <router-outlet></router-outlet>
-<div style="position: fixed; right: 0; bottom: 0; margin-right: 20px; margin-bottom: 10px; z-index: 9999;" ngbDropdown>
-    <button style="width: 80px; height: 40px;" class="custom-class-or-id" mat-icon-button ngbDropdownToggle>
+<div style="position: fixed; right: 0; bottom: 0; margin-right: 20px; margin-bottom: 10px; z-index: 9999;" ngbDropdown (openChange)="changeStatus($event)">
+    <button style="width: 80px; height: 40px;" class="custom-class-or-id" mat-icon-button ngbDropdownToggle *ngIf=!isOpen>
         <!-- <mat-icon>help_outlined</mat-icon> -->
         <img src="../../../../../assets/images/kami/dedinho-para-o-alto.png" style="position: relative; float: right; width: 50px;">
+    </button>
+    <button style="width: 80px; height: 40px;" class="custom-class-or-id" mat-icon-button ngbDropdownToggle *ngIf=isOpen>
+        <!-- <mat-icon>help_outlined</mat-icon> -->
+        <img src="../../../../../assets/images/kami/fazendo-dab.png" style="position: relative; float: right; width: 50px;">
     </button>
     <div ngbDropdownMenu>
         <iframe style="height:480px; width:402px" src="https://webchat.botframework.com/embed/challenger-bot/gemini?b=challenger-bot&s=WNXiSjeO0FY.QFqPIU_o_uTgpd6kt6mkRP6-hqCng6C7-ssc4QvDMFE&username=You"></iframe>

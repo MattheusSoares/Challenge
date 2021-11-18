@@ -233,6 +233,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
     filterSelectedAttributeNewScore(event) {
         const scoreHelper = event.value.scoreHelper.split(";");
         const allowedScores = event.value.allowedScores.split(";");
+        this.newScoreValues = [];
 
         const newScoreValuesMapped = [];
 
@@ -260,6 +261,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
             this.employeeAttributeService.postSaveEmployeeAttribute(payload).subscribe(response => {
                 this.notifier.notify('success', 'Pontuação salva com sucesso!');
                 this.getEmployeeAttribute(this.employeelId);
+                this.newScoreValues = [];
             },
                 (err) => {
                     this.notifier.notify('error', `Ocorreu um erro ao salvar a nova pontuação.`);
@@ -434,7 +436,7 @@ export class EmployeeDetalhesComponent extends UnsubscribeOnDestroyAdapter imple
                     },
                     detail: {
                         fontSize: 50,
-                        offsetCenter: [0, '40%'],
+                        offsetCenter: [0, '60%'],
                         valueAnimation: true,
                         color: 'auto'
                     },

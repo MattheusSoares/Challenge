@@ -123,7 +123,7 @@
 
                                   <div class="row">
                                     <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                      <div class="card filtro-atributo-detalhes-employee">
+                                      <div class="card filtro-atributo-detalhes-employee-grafico">
                                         <mat-form-field>
                                           <mat-label>Atributos</mat-label>
                                           <mat-select [formControl]="attributeCategoriesCharts"
@@ -156,26 +156,24 @@
                                       <div echarts
                                            *ngIf="attributeSelected != null"
                                            [options]="chartGaugeAll"
-                                           class="echart-height"></div>
+                                           class="echart-height echart-height-gauge"></div>
 
                                     </div>
-                                  <!-- </div>
 
 
-                                  <div class="row"> -->
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 5</h4>
+                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 5 Registros</h4>
                                       <div echarts
                                            *ngIf="attributeSelected != null"
                                            [options]="chartGaugeLast5"
-                                           class="echart-height"></div>
+                                           class="echart-height echart-height-gauge"></div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 10</h4>
+                                      <h4 class="titulo-graficos" *ngIf="attributeSelected != null">Média dos Últimos 10 Registros</h4>
                                       <div echarts
                                            *ngIf="attributeSelected != null"
                                            [options]="chartGaugeLast10"
-                                           class="echart-height"></div>
+                                           class="echart-height echart-height-gauge"></div>
                                     </div>
                                   </div>
 
@@ -283,27 +281,10 @@
           </mat-form-field>
         </div>
         <div *ngFor="let value of newScoreValues">
-          {{ value.description}}
+          {{ value.description }}
         </div>
       </div>
 
-      <!-- <div class="form-group">
-        <div class="col-md-12">
-          <mat-form-field appearance="fill"
-                          class="width-filter">
-            <mat-label>Score</mat-label>
-            <input type="number"
-                   matInput
-                   min="1"
-                   max="10"
-                   name="score"
-                   id="score"
-                   formControlName="newScoreValue"
-                   required>
-          </mat-form-field>
-        </div>
-      </div>
- -->
     </form>
   </div>
 
